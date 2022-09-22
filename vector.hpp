@@ -47,39 +47,64 @@ class vector
 		{
 			//  1. Allocate a new block of memory
 			//pointer	newData = new T[newCapacity];
-			pointer	newData = _allocator.allocate(newCapacity);
+			pointer	newData = _allocator.allocate(newCapacity, 0);
 			
-			//	2. Copy (move) existing elements into new blck of memory
-			for (size_type i = 0; i < _size; i++)
-				newData[i] = _data[i]; //  This is copying, not moving
+			//	2. Copy (move) existing elements into new block of memory
+    		for (size_type i = 0; i < _size; i++)
+    		    _allocator.construct(newData + i, *(_data + i));
+
+			//	3. Delete old block of memory
+    		for (size_type i = 0; i < _size; i++)
+    		    _allocator.destroy(_data + i);
+    		_allocator.deallocate(_data, _capacity);
+
+    		// set new stuff, after everything worked out nicely
+			/* for (size_type i = 0; i < _size; i++)
+				newData[i] = _data[i]; */ // Esto funciona pero no es lo que hace el vector
 			//for (size_type i = 0; i < _size; i++)
 			//	_allocator.construct(newData[i], _data[i]); //  This is copying, not moving
 
-			//	3. Delete old block of memory
-			//delete[] _data;
-			_allocator.destroy(_data);
-			_allocator.deallocate(_data, _capacity);
+			//	4. Set new stuff, after everything worked out nicely
 			_data = newData;
 			_capacity = newCapacity;
 		}
 	
 	public: // Member functions in alphabetical order
 		// capacity
-		size_type capacity() const { return (_capacity); }
+		size_type		capacity() const { return (_capacity); }
+
+		// clear
+		void			clear()
+		{
+			for (size_type i = 0; i < _size; i++)
+    		    _allocator.destroy(_data + i);
+			_size = 0;
+		}
+
+		// pop_back
+		void			pop_back()
+		{
+			_allocator.destroy(_data + _size - 1);
+			_size--;
+			// Aqui habrá que hacer algo con el puntero a end
+		}
 
 		// push_back
-		void	push_back(const value_type& val)
+		void			push_back(const value_type& val)
 		{
-			if (_size <= _capacity) // Hay que tener en cuenta el tamaño del dato que meto
-				reAlloc(2 * _capacity);
-			_data[_size++] = val;
+			if (_size == _capacity) // Hay que tener en cuenta el tamaño del dato que meto
+				reAlloc((_capacity > 0) ? 2 * _capacity : 1);
+			_allocator.construct(_data + _size, val);
+			_size++;
+			//_data[_size++] = val;
 		}
 		
 		// size
-		size_type size(void) const	{ return (_size); }
+		size_type		size(void) const	{ return (_size); }
 
 		// operator[]
-		
+		reference		operator[] (size_type n) { return (_data[n]); }
+		const_reference	operator[] (size_type n) const { return (_data[n]); }
 };
 
 }
