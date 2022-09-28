@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/20 15:31:43 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/09/28 14:32:15 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 # define VECTOR_HPP
 
 # include <iostream>
+# include "iterator.hpp"
 
 namespace ft {
 
 template <typename T, typename Allocator = std::allocator<T> >
-
 class vector
 {
 	public:
