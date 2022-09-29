@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 14:18:12 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/28 16:36:19 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/09/29 20:02:58 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ namespace ft {
 	different operations supported by different iterator types.
 */
 //  Marking input iterators.
-struct input_iterator_tag {};
+//struct input_iterator_tag {};
 //  Marking output iterators.
-struct output_iterator_tag {};
+//struct output_iterator_tag {};
 // Forward iterators support a superset of input iterator operations.
-struct forward_iterator_tag : public input_iterator_tag {};
+//struct forward_iterator_tag : public input_iterator_tag {};
 // Bidirectional iterators support a superset of forward iterator
 // operations.
-struct bidirectional_iterator_tag : public forward_iterator_tag {};
+//struct bidirectional_iterator_tag : public forward_iterator_tag {};
 // Random-access iterators support a superset of bidirectional iterator
 // operations.
-struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+//struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
 
 /*
@@ -59,8 +59,8 @@ struct iterator_traits
 
 // Specialization for ordinary pointers so they can also be used as iterators
 
-template<typename T>
-struct iterators_traits<T*> 
+template <typename T>
+struct iterator_traits<T*> 
 {
     typedef ptrdiff_t                           	difference_type;
     typedef T                                   	value_type;
@@ -71,8 +71,8 @@ struct iterators_traits<T*>
 
 // Specialization for constant pointers so they can also be used as iterators
 
-template<typename T>
-struct iterators_traits<const T*> 
+template <typename T>
+struct iterator_traits<const T*> 
 {
     typedef ptrdiff_t                           	difference_type;
     typedef T                                   	value_type;
@@ -80,6 +80,16 @@ struct iterators_traits<const T*>
     typedef const T&                            	reference;
     typedef std::random_access_iterator_tag     	iterator_category;
 };
+
+// template <typename Category, typename T, typename Distance = ptrdiff_t, typename Pointer = T*, typename Reference = T&>
+// struct my_iterator 
+// {
+// 		typedef T         							value_type;
+// 		typedef Distance  							difference_type;
+// 		typedef Pointer   							pointer;
+// 		typedef Reference 							reference;
+// 		typedef Category  							iterator_category;
+// };
 
 }
 

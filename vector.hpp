@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/28 14:32:15 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/09/29 20:02:47 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define VECTOR_HPP
 
 # include <iostream>
-# include "iterator.hpp"
+# include "utils/iterator.hpp"
+# include "utils/vector_iterator.hpp"
 
 namespace ft {
 
@@ -22,16 +23,21 @@ template <typename T, typename Allocator = std::allocator<T> >
 class vector
 {
 	public:
-	// Redefinitions
-		typedef	Allocator											allocator_type;
-		typedef typename allocator_type::value_type					value_type;			// T
-        typedef typename allocator_type::pointer					pointer;			// T*
-        typedef typename allocator_type::const_pointer				const_pointer;		// const T*
-		typedef typename allocator_type::reference					reference;			// T&
-        typedef typename allocator_type::const_reference			const_reference;	// const T&
-        typedef typename allocator_type::size_type					size_type;			// std::size_t
+	// Redefinition of member types
+		typedef	Allocator												allocator_type;
+		typedef T														value_type;			// T
+        typedef typename allocator_type::pointer						pointer;			// T*
+        typedef typename allocator_type::const_pointer					const_pointer;		// const T*
+		typedef typename allocator_type::reference						reference;			// T&
+        typedef typename allocator_type::const_reference				const_reference;	// const T&
+        typedef typename allocator_type::size_type						size_type;			// std::size_t
 		//typedef	T													value_type;
 		//typedef size_t												size_type;
+		typedef VectorIterator<pointer>									iterator;
+		typedef VectorIterator<const_pointer>							const_iterator;
+//		typedef VectorReverseIterator<iterator>							reverse_iterator;
+//		typedef VectorReverseIterator<const_iterator>					const_reverse_iterator;
+		typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
 
 	// Constructors & Destructor
 		vector(void) { };
@@ -70,6 +76,10 @@ class vector
 		}
 	
 	public: // Member functions in alphabetical order
+		// begin
+		iterator		begin() { return (_data); }
+		const_iterator	begin() const { return (_data); }
+
 		// capacity
 		size_type		capacity() const { return (_capacity); }
 
@@ -80,6 +90,10 @@ class vector
     		    _allocator.destroy(_data + i);
 			_size = 0;
 		}
+
+		// end
+		iterator		end() { return (&_data[_size]); }
+		const_iterator	end() const { return (&_data[_size]); }
 
 		// pop_back
 		void			pop_back()
