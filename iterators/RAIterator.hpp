@@ -1,60 +1,102 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector_iterator.hpp                                :+:      :+:    :+:   */
+/*   RAiterator.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/29 19:18:20 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/09/30 14:02:32 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTOR_ITERATOR_HPP
-# define VECTOR_ITERATOR_HPP
+#ifndef RAITERATOR_HPP
+# define RAITERATOR_HPP
 
-# include "iterator.hpp"
+# include "iterator_traits.hpp"
 # include <iostream>
 
 namespace ft {
 
-template<typename Type>
-class VectorIterator : public std::iterator<std::random_access_iterator_tag, Type>
-{
-public:
-	typedef typename std::iterator<std::random_access_iterator_tag, Type>::difference_type difference_type;
-    //using difference_type = typename std::iterator<std::random_access_iterator_tag, Type>::difference_type;
+/* 
+    QUESTION: What is T here?
+    ANSWER: It is a pointer. All of the following lines are correct:
+
+    ft::iterator_traits<std::vector<int>::iterator>::difference_type a;
+    ft::iterator_traits<std::allocator<int>::pointer>::difference_type b;
+    ft::iterator_traits<int *>::difference_type c;
+
+    However, the following one is incorrect:
     
-    VectorIterator() : _ptr(nullptr) {}
-    VectorIterator(Type* rhs) : _ptr(rhs) {}
-    VectorIterator(const VectorIterator &rhs) : _ptr(rhs._ptr) {}
+    ft::iterator_traits<int>::difference_type c;
+
+    This class will always be instanciated with RAIterator<pointer>	(or const
+    iterator).
+*/
+
+template<typename T> 
+class RAIterator
+{
+    public:
+    	typedef typename ft::iterator_traits<T>::difference_type	difference_type;
+        typedef typename ft::iterator_traits<T>::value_type			value_type;
+    	typedef typename ft::iterator_traits<T>::pointer			pointer;
+    	typedef typename ft::iterator_traits<T>::reference			reference;
+    	typedef typename ft::iterator_traits<T>::iterator_category	iterator_category;    //using difference_type = typename std::iterator<std::random_access_iterator_tag, Type>::difference_type;
+    
+        // Constructors
+        RAIterator() : _ptr(NULL) { std::cout << "First constructor called" << std::endl; }
+        RAIterator(T src) : _ptr(src) { std::cout << "Second constructor called" << std::endl; }
+        RAIterator(const RAIterator &src) : _ptr(src._ptr) { std::cout << "Third constructor called" << std::endl; }
+
+		// Deference operators
+        reference	operator*() const { return(*_ptr); }
+		pointer		operator->() const { return(&(operator*())); }
+		
+		// Increment & decrement operators
+        RAIterator&	operator++() { ++_ptr; return (*this); }
+		RAIterator	operator++(int)
+		{
+			RAIterator ret(*this);
+			++_ptr;
+			return ret;
+		}
+
+		// Assignment operators
+		RAIterator	operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
+
+		// Relational operators
+		bool		operator==(const RAIterator &it) { return((_ptr == it._ptr) ? 1 : 0); }
+		bool		operator!=(const RAIterator &it) { return((_ptr == it._ptr) ? 0 : 1); }
+
+        
     /* inline VectorIterator& operator=(Type* rhs) {_ptr = rhs; return *this;} */
     /* inline VectorIterator& operator=(const VectorIterator &rhs) {_ptr = rhs._ptr; return *this;} */
-    inline VectorIterator& operator+=(difference_type rhs) {_ptr += rhs; return *this;}
-    inline VectorIterator& operator-=(difference_type rhs) {_ptr -= rhs; return *this;}
-    inline Type& operator*() const {return *_ptr;}
-    inline Type* operator->() const {return _ptr;}
-    inline Type& operator[](difference_type rhs) const {return _ptr[rhs];}
+    // inline VectorIterator& operator+=(difference_type rhs) {_ptr += rhs; return *this;}
+    // inline VectorIterator& operator-=(difference_type rhs) {_ptr -= rhs; return *this;}
+    // inline Type& operator*() const {return *_ptr;}
+    // inline Type* operator->() const {return _ptr;}
+    // inline Type& operator[](difference_type rhs) const {return _ptr[rhs];}
     
-    inline VectorIterator& operator++() {++_ptr; return *this;}
-    inline VectorIterator& operator--() {--_ptr; return *this;}
-    inline VectorIterator operator++(int) const {VectorIterator tmp(*this); ++_ptr; return tmp;}
-    inline VectorIterator operator--(int) const {VectorIterator tmp(*this); --_ptr; return tmp;}
-    /* inline VectorIterator operator+(const VectorIterator& rhs) {return VectorIterator(_ptr+rhs.ptr);} */
-    inline difference_type operator-(const VectorIterator& rhs) const {return _ptr-rhs.ptr;}
-    inline VectorIterator operator+(difference_type rhs) const {return VectorIterator(_ptr+rhs);}
-    inline VectorIterator operator-(difference_type rhs) const {return VectorIterator(_ptr-rhs);}
-    friend inline VectorIterator operator+(difference_type lhs, const VectorIterator& rhs) {return VectorIterator(lhs+rhs._ptr);}
-    friend inline VectorIterator operator-(difference_type lhs, const VectorIterator& rhs) {return VectorIterator(lhs-rhs._ptr);}
+    // inline VectorIterator& operator++() {++_ptr; return *this;}
+    // inline VectorIterator& operator--() {--_ptr; return *this;}
+    // inline VectorIterator operator++(int) const {VectorIterator tmp(*this); ++_ptr; return tmp;}
+    // inline VectorIterator operator--(int) const {VectorIterator tmp(*this); --_ptr; return tmp;}
+    // /* inline VectorIterator operator+(const VectorIterator& rhs) {return VectorIterator(_ptr+rhs.ptr);} */
+    // inline difference_type operator-(const VectorIterator& rhs) const {return _ptr-rhs.ptr;}
+    // inline VectorIterator operator+(difference_type rhs) const {return VectorIterator(_ptr+rhs);}
+    // inline VectorIterator operator-(difference_type rhs) const {return VectorIterator(_ptr-rhs);}
+    // friend inline VectorIterator operator+(difference_type lhs, const VectorIterator& rhs) {return VectorIterator(lhs+rhs._ptr);}
+    // friend inline VectorIterator operator-(difference_type lhs, const VectorIterator& rhs) {return VectorIterator(lhs-rhs._ptr);}
     
-    inline bool operator==(const VectorIterator& rhs) const {return _ptr == rhs._ptr;}
-    inline bool operator!=(const VectorIterator& rhs) const {return _ptr != rhs._ptr;}
-    inline bool operator>(const VectorIterator& rhs) const {return _ptr > rhs._ptr;}
-    inline bool operator<(const VectorIterator& rhs) const {return _ptr < rhs._ptr;}
-    inline bool operator>=(const VectorIterator& rhs) const {return _ptr >= rhs._ptr;}
-    inline bool operator<=(const VectorIterator& rhs) const {return _ptr <= rhs._ptr;}
-private:
-    Type* _ptr;
+    // inline bool operator==(const VectorIterator& rhs) const {return _ptr == rhs._ptr;}
+    // inline bool operator!=(const VectorIterator& rhs) const {return _ptr != rhs._ptr;}
+    // inline bool operator>(const VectorIterator& rhs) const {return _ptr > rhs._ptr;}
+    // inline bool operator<(const VectorIterator& rhs) const {return _ptr < rhs._ptr;}
+    // inline bool operator>=(const VectorIterator& rhs) const {return _ptr >= rhs._ptr;}
+    // inline bool operator<=(const VectorIterator& rhs) const {return _ptr <= rhs._ptr;}
+    private:
+        pointer  _ptr;
 };
 
 // template<typename T>

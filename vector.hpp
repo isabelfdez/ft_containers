@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/29 20:02:47 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/09/30 14:21:38 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define VECTOR_HPP
 
 # include <iostream>
-# include "utils/iterator.hpp"
-# include "utils/vector_iterator.hpp"
+# include "iterators/iterator_traits.hpp"
+# include "iterators/RAIterator.hpp"
 
 namespace ft {
 
@@ -33,14 +33,14 @@ class vector
         typedef typename allocator_type::size_type						size_type;			// std::size_t
 		//typedef	T													value_type;
 		//typedef size_t												size_type;
-		typedef VectorIterator<pointer>									iterator;
-		typedef VectorIterator<const_pointer>							const_iterator;
+		typedef RAIterator<pointer>										iterator;
+		typedef RAIterator<const_pointer>								const_iterator;
 //		typedef VectorReverseIterator<iterator>							reverse_iterator;
 //		typedef VectorReverseIterator<const_iterator>					const_reverse_iterator;
 		typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
 
 	// Constructors & Destructor
-		vector(void) { };
+		vector(void) { }
 
 	private:
 		pointer			_data;
@@ -77,8 +77,8 @@ class vector
 	
 	public: // Member functions in alphabetical order
 		// begin
-		iterator		begin() { return (_data); }
-		const_iterator	begin() const { return (_data); }
+		iterator		begin() { return (iterator(_data)); }
+		const_iterator	begin() const { return (const_iterator(_data)); }
 
 		// capacity
 		size_type		capacity() const { return (_capacity); }
@@ -92,8 +92,8 @@ class vector
 		}
 
 		// end
-		iterator		end() { return (&_data[_size]); }
-		const_iterator	end() const { return (&_data[_size]); }
+		iterator		end() { return (iterator(&_data[_size])); }
+		const_iterator	end() const { return (const_iterator(&_data[_size])); }
 
 		// pop_back
 		void			pop_back()

@@ -1,17 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   iterator.hpp                                       :+:      :+:    :+:   */
+/*   iterator_traits.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 14:18:12 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/29 20:02:58 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/09/30 11:02:01 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
+
+# include <iterator>
 
 namespace ft {
 /*
@@ -47,7 +49,7 @@ namespace ft {
 	this consistent way.
 */
 
-template <typename Iterator> // iterator stand for the type of iterator
+template <typename Iterator> // Iterator stands for the type of iterator
 struct iterator_traits
 {
 	typedef typename Iterator::difference_type		difference_type;
