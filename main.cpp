@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:26:49 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/30 14:03:18 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:21:53 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,40 +30,16 @@ int main(void)
     
     
     ft::vector<int>::iterator it;     
-    ft::vector<int>::iterator it2; 
-    // int n = 3;  // nth element to be found.
-    // int i = 0;  // counter.
+    ft::vector<int>::iterator it2;
+    ft::vector<int>::iterator it3; 
+
+    
     it = myvector.begin();
-    it2 = myvector.end();
-    while (it != it2)
-    {
-        std::cout<< *it << std::endl;
-        ++it;
-    }
-    std::cout<< (it == it2) << std::endl;
-    //std::cout<< *it << std::endl; 
-    //++it;
-    //std::cout<< *it << std::endl;
-
+    std::cout << *it[1] << std::endl;
+    it++;
 
     
-    // now start at from the beginning
-    // and keep iterating over the element till you find
-    // nth element...or reach the end of vector.
-    //  for(it = myvector.begin(); it != myvector.end(); it++,i++ )    {
-    //      // found nth element..print and break.
-    //      if(i == n) {
-    //          std::cout<< *it << std::endl;  // prints d.
-    //          break;
-    //      }
-    //  }
     
-    // // other easier ways of doing the same.
-    // // using operator[]
-    // cout<<myvector[n]<<endl;  // prints d.
-    
-    // // using the at method
-    // cout << myvector.at(n) << endl;  // prints d.
     //system("leaks a.out");
 
     return (0);

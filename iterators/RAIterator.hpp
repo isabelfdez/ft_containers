@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/30 14:02:32 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:25:43 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class RAIterator
 		// Deference operators
         reference	operator*() const { return(*_ptr); }
 		pointer		operator->() const { return(&(operator*())); }
+        pointer     operator[](difference_type src) const { return (&(_ptr[src])); }
 		
 		// Increment & decrement operators
         RAIterator&	operator++() { ++_ptr; return (*this); }
@@ -62,39 +63,33 @@ class RAIterator
 			return ret;
 		}
 
+        RAIterator&	operator--() { --_ptr; return (*this); }
+		RAIterator	operator--(int)
+		{
+			RAIterator ret(*this);
+			--_ptr;
+			return ret;
+		}
+
+		// Arithmetic operators
+		RAIterator& operator+(const difference_type& n)  const { return (RAIterator(_ptr + n)); }
+		//RAIterator& operator+(const RAIterator& it) { return (RAIterator(_ptr + it._ptr)); }
+
+		RAIterator& operator-(const int& n) const { return (RAIterator(_ptr - n)); }
+		//RAIterator& operator-(const RAIterator& it) { return (RAIterator(_ptr - it._ptr)); }
+
 		// Assignment operators
-		RAIterator	operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
+		RAIterator&	operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
+		RAIterator&	operator+=(const difference_type& n) { _ptr+=n; return (*this); }
 
 		// Relational operators
-		bool		operator==(const RAIterator &it) { return((_ptr == it._ptr) ? 1 : 0); }
-		bool		operator!=(const RAIterator &it) { return((_ptr == it._ptr) ? 0 : 1); }
-
-        
-    /* inline VectorIterator& operator=(Type* rhs) {_ptr = rhs; return *this;} */
-    /* inline VectorIterator& operator=(const VectorIterator &rhs) {_ptr = rhs._ptr; return *this;} */
-    // inline VectorIterator& operator+=(difference_type rhs) {_ptr += rhs; return *this;}
-    // inline VectorIterator& operator-=(difference_type rhs) {_ptr -= rhs; return *this;}
-    // inline Type& operator*() const {return *_ptr;}
-    // inline Type* operator->() const {return _ptr;}
-    // inline Type& operator[](difference_type rhs) const {return _ptr[rhs];}
+		bool		operator==(const RAIterator &it) const { return(_ptr == it._ptr); }
+		bool		operator!=(const RAIterator &it) const { return(_ptr != it._ptr); }
+		bool		operator>(const RAIterator &it) const { return(_ptr > it._ptr); }
+		bool		operator<(const RAIterator &it) const { return(_ptr < it._ptr); }
+		bool		operator>=(const RAIterator &it) const { return(_ptr >= it._ptr); }
+		bool		operator<=(const RAIterator &it) const { return(_ptr <= it._ptr); }
     
-    // inline VectorIterator& operator++() {++_ptr; return *this;}
-    // inline VectorIterator& operator--() {--_ptr; return *this;}
-    // inline VectorIterator operator++(int) const {VectorIterator tmp(*this); ++_ptr; return tmp;}
-    // inline VectorIterator operator--(int) const {VectorIterator tmp(*this); --_ptr; return tmp;}
-    // /* inline VectorIterator operator+(const VectorIterator& rhs) {return VectorIterator(_ptr+rhs.ptr);} */
-    // inline difference_type operator-(const VectorIterator& rhs) const {return _ptr-rhs.ptr;}
-    // inline VectorIterator operator+(difference_type rhs) const {return VectorIterator(_ptr+rhs);}
-    // inline VectorIterator operator-(difference_type rhs) const {return VectorIterator(_ptr-rhs);}
-    // friend inline VectorIterator operator+(difference_type lhs, const VectorIterator& rhs) {return VectorIterator(lhs+rhs._ptr);}
-    // friend inline VectorIterator operator-(difference_type lhs, const VectorIterator& rhs) {return VectorIterator(lhs-rhs._ptr);}
-    
-    // inline bool operator==(const VectorIterator& rhs) const {return _ptr == rhs._ptr;}
-    // inline bool operator!=(const VectorIterator& rhs) const {return _ptr != rhs._ptr;}
-    // inline bool operator>(const VectorIterator& rhs) const {return _ptr > rhs._ptr;}
-    // inline bool operator<(const VectorIterator& rhs) const {return _ptr < rhs._ptr;}
-    // inline bool operator>=(const VectorIterator& rhs) const {return _ptr >= rhs._ptr;}
-    // inline bool operator<=(const VectorIterator& rhs) const {return _ptr <= rhs._ptr;}
     private:
         pointer  _ptr;
 };

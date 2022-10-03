@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/30 14:21:38 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:27:57 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ class vector
 		}
 	
 	public: // Member functions in alphabetical order
+		// assign
+		
+		
 		// begin
 		iterator		begin() { return (iterator(_data)); }
 		const_iterator	begin() const { return (const_iterator(_data)); }
