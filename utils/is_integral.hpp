@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 15:49:31 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/03 16:18:22 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:35:11 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 namespace ft{
 
-/*
+/*	
+	(class template)
 	Static data members are class members that are declared using static keywords.
 	A static member has certain special characteristics. These are:
 

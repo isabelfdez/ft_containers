@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/03 15:25:43 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/04 14:35:46 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ class RAIterator
     	typedef typename ft::iterator_traits<T>::iterator_category	iterator_category;    //using difference_type = typename std::iterator<std::random_access_iterator_tag, Type>::difference_type;
     
         // Constructors
-        RAIterator() : _ptr(NULL) { std::cout << "First constructor called" << std::endl; }
-        RAIterator(T src) : _ptr(src) { std::cout << "Second constructor called" << std::endl; }
-        RAIterator(const RAIterator &src) : _ptr(src._ptr) { std::cout << "Third constructor called" << std::endl; }
+        RAIterator() : _ptr(NULL) { /*std::cout << "First constructor called" << std::endl;*/ }
+        RAIterator(T src) : _ptr(src) { /*std::cout << "Second constructor called" << std::endl;*/ }
+        RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ }
 
 		// Deference operators
         reference	operator*() const { return(*_ptr); }
@@ -72,23 +72,21 @@ class RAIterator
 		}
 
 		// Arithmetic operators
-		RAIterator& operator+(const difference_type& n)  const { return (RAIterator(_ptr + n)); }
-		//RAIterator& operator+(const RAIterator& it) { return (RAIterator(_ptr + it._ptr)); }
-
-		RAIterator& operator-(const int& n) const { return (RAIterator(_ptr - n)); }
-		//RAIterator& operator-(const RAIterator& it) { return (RAIterator(_ptr - it._ptr)); }
+		RAIterator		operator+(const difference_type& n)  const { return (RAIterator(_ptr + n)); }
+		RAIterator		operator-(const int& n) const { return (RAIterator(_ptr - n)); }
+		difference_type	operator-(const RAIterator& it) { return (_ptr - it._ptr); }
 
 		// Assignment operators
-		RAIterator&	operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
-		RAIterator&	operator+=(const difference_type& n) { _ptr+=n; return (*this); }
+		RAIterator&		operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
+		RAIterator&		operator+=(const difference_type& n) { _ptr += n; return (*this); }
 
 		// Relational operators
-		bool		operator==(const RAIterator &it) const { return(_ptr == it._ptr); }
-		bool		operator!=(const RAIterator &it) const { return(_ptr != it._ptr); }
-		bool		operator>(const RAIterator &it) const { return(_ptr > it._ptr); }
-		bool		operator<(const RAIterator &it) const { return(_ptr < it._ptr); }
-		bool		operator>=(const RAIterator &it) const { return(_ptr >= it._ptr); }
-		bool		operator<=(const RAIterator &it) const { return(_ptr <= it._ptr); }
+		bool			operator==(const RAIterator &it) const { return(_ptr == it._ptr); }
+		bool			operator!=(const RAIterator &it) const { return(_ptr != it._ptr); }
+		bool			operator>(const RAIterator &it) const { return(_ptr > it._ptr); }
+		bool			operator<(const RAIterator &it) const { return(_ptr < it._ptr); }
+		bool			operator>=(const RAIterator &it) const { return(_ptr >= it._ptr); }
+		bool			operator<=(const RAIterator &it) const { return(_ptr <= it._ptr); }
     
     private:
         pointer  _ptr;

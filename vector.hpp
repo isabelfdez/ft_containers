@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/03 15:27:57 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/04 14:52:22 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <iostream>
 # include "iterators/iterator_traits.hpp"
 # include "iterators/RAIterator.hpp"
+# include "utils/enable_if.hpp"
+# include "utils/is_integral.hpp"
+
 
 namespace ft {
 
@@ -40,7 +43,48 @@ class vector
 		typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
 
 	// Constructors & Destructor
-		vector(void) { }
+	// default (1): Constructs an empty container, with no elements.
+		explicit vector(const allocator_type& alloc = allocator_type()) : 
+			_data(NULL), _size(0), _capacity(0), _allocator(alloc) { }
+	// fill(2): Constructs a container with n elements. Each element is a copy of val.
+		explicit vector(size_type n, const value_type& val = value_type(), 
+						const allocator_type& alloc = allocator_type()) : 
+			_data(NULL), _size(0), _capacity(0), _allocator(alloc)
+		{
+			reAlloc(n);
+			for (size_type i = 0; i < n; i++)
+				push_back(val);
+		}
+	// range(3): Constructs a container with as many elements as the range [first,last),
+	//			 with each element constructed from its corresponding element in that range,
+	//			 in the same order.
+		template <typename InputIterator>
+		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = NULL) :
+			_data(NULL), _size(0), _capacity(0), _allocator(alloc)
+		{
+			if (last > first)
+			{
+				reAlloc(last - first);
+				while (first < last)
+				{
+					this->push_back(*first);
+					first++;
+				}
+			}
+		}
+	// copy: Constructs a container with a copy of each of the elements in x, in the same order.
+		vector(const vector& x)
+		{
+			_allocator = std::allocator::allocator(vector.allocator_type);
+			_capacity = x.capacity();
+			if (x._capacity > 0)
+				_c = _alloc.allocate(_capacity);
+			for (size_type i = 0; i <_size; i++)
+				_alloc.construct(&_c[i], x._c[i]);
+		}
+
+	
 
 	private:
 		pointer			_data;
@@ -77,7 +121,18 @@ class vector
 	
 	public: // Member functions in alphabetical order
 		// assign
-		
+		template <typename InputIterator>
+		void			assign(InputIterator first, InputIterator last/*, 
+								typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+								InputIterator>::type * = NULL*/)
+		{
+			this->clear();
+			while (first < last)
+			{
+				this->push_back(*first);
+				first++;
+			}
+		}
 		
 		// begin
 		iterator		begin() { return (iterator(_data)); }

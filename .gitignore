@@ -3,3 +3,4 @@
 *.out
 test*.cpp
 *.txt
+**/containers_test
