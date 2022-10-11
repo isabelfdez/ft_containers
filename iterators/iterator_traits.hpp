@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 14:18:12 by isfernan          #+#    #+#             */
-/*   Updated: 2022/09/30 11:02:01 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/11 11:45:18 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,6 @@ struct iterator_traits<const T*>
     typedef const T&                            	reference;
     typedef std::random_access_iterator_tag     	iterator_category;
 };
-
-// template <typename Category, typename T, typename Distance = ptrdiff_t, typename Pointer = T*, typename Reference = T&>
-// struct my_iterator 
-// {
-// 		typedef T         							value_type;
-// 		typedef Distance  							difference_type;
-// 		typedef Pointer   							pointer;
-// 		typedef Reference 							reference;
-// 		typedef Category  							iterator_category;
-// };
 
 }
 

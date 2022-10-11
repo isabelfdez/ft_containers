@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/06 15:06:42 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/11 14:43:00 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,15 +188,118 @@ class vector
 		{
 			size_type	n = position - this->begin();
 		
-    		for (size_type i = n; i < _size; i++)
+    		for (size_type i = n; i < _size - 1; i++)
     		    _data[i] = _data[i + 1];
+			std::cout << _data[n] << std::endl;
+
+			_allocator.destroy(&_data[_size]);
 			_size--;
 			return (iterator(&_data[n]));
+		}
+		iterator		erase(iterator first, iterator last)
+		{
+			size_type	n = first - this->begin();
+			size_type	l = last - first;
+		
+    		iterator it = first;
+			while (it != last)
+			{
+				_allocator.destroy(&_data[n]);
+				_allocator.construct(&_data[n], _data[n + l]);
+				n++;
+				it++;
+			}
+			while (it != end())
+			{
+				_allocator.destroy(&_data[n]);
+				n++;
+				it++;
+			}
+			_size -= l;
+			return first;
 		}
 		
 		// front
 		reference		front() { return _data[0]; }
 		const_reference	front() const { return _data[0]; }
+
+		// get_allocator
+		allocator_type	get_allocator() { return _allocator; }
+
+		// insert
+		iterator		insert(iterator position, const value_type& val)
+		{
+			size_type	dist = 0;
+
+			if (_size > 0)
+				dist = position - this->begin();
+			if (_size + 1 > _capacity)
+				reAlloc(_capacity * 2);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+			for (size_type i = _size; i > dist; i--)
+				_allocator.construct(&_data[i], _data[i - 1]);
+			_allocator.construct(&_data[dist], val);
+			_size++;
+			return position;
+		}
+		void			insert(iterator position, size_type n, const value_type& val)
+		{
+			size_type 	dist = 0;
+			size_type 	dist2 = 0;
+
+			if (_size > 0)
+			{
+				dist = position - this->begin() + n - 1;
+				dist2 = position - this->begin();
+			}
+			if (_size + n > _capacity)
+				reAlloc((_size + n >_capacity * 2) ? _size + n : _capacity * 2);
+			for (size_type i = _size + n - 1; i > dist; i--)
+				_allocator.construct(&_data[i], _data[i - n]);
+			for (size_type i = dist; i >= dist2; i--)
+				_allocator.construct(&_data[i], val);
+			_size += n;
+		}
+		template <class InputIterator>
+		void			insert(iterator position, InputIterator first, InputIterator last)
+		{
+
+			size_type dist = 0;
+			if (_size > 0)
+				dist = position - begin();
+			size_type n = last - first;
+			if (_size + n > _capacity)
+			{
+				if (n > _size)
+					reserve(_size + n);
+				else
+					reAlloc(_capacity * 2);
+			}
+			_size += n;
+			for (size_type i = _size - 1; i > dist; i--)
+				_allocator.construct(&_data[i], _data[i - n]);
+			for (size_type i = 0; i < n; i++)
+				_allocator.construct(&_data[dist + i], *(first + i));
+			// size_type 	dist = 0;
+			// size_type 	dist2 = 0;
+			// size_type	n = last - first;
+
+			// if (_size > 0)
+			// {
+			// 	dist = position - this->begin() + n - 1;
+			// 	dist2 = position - this->begin();
+			// }
+			// if (_size + n > _capacity)
+			// 	reAlloc((_size + n >_capacity * 2) ? _size + n : _capacity * 2);
+			// for (size_type i = _size + n - 1; i > dist; i--)
+			// 	_allocator.construct(&_data[i], _data[i - n]);
+			// for (size_type i = dist; i >= dist2; i--)
+			// {
+			// 	_allocator.construct(&_data[i], *last);
+			// 	last--;
+			// }
+			// _size += n;
+		}
+
 
 		// max_size
 		size_type		max_size() const { return _allocator.max_size(); }

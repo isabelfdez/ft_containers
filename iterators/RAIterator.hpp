@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/04 14:35:46 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/11 12:56:26 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,13 @@ class RAIterator
         // Constructors
         RAIterator() : _ptr(NULL) { /*std::cout << "First constructor called" << std::endl;*/ }
         RAIterator(T src) : _ptr(src) { /*std::cout << "Second constructor called" << std::endl;*/ }
-        RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ }
+        RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ } // CHANGE
+		template <typename S>
+		RAIterator (const RAIterator<S> &other) { _ptr = other.getptr(); }
+		
+		//  explicit RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ } // CHANGE
+        // template<typename iter>
+		// 	RAIterator(const RAIterator<iter> &src) : _ptr(src) { /*std::cout << "Second constructor called" << std::endl;*/ }
 
 		// Deference operators
         reference	operator*() const { return(*_ptr); }
@@ -78,7 +84,9 @@ class RAIterator
 
 		// Assignment operators
 		RAIterator&		operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
+		RAIterator&		operator=(RAIterator &it) { _ptr = it._ptr; return (*this); }
 		RAIterator&		operator+=(const difference_type& n) { _ptr += n; return (*this); }
+		RAIterator&		operator-=(const difference_type& n) { _ptr -= n; return (*this); }
 
 		// Relational operators
 		bool			operator==(const RAIterator &it) const { return(_ptr == it._ptr); }
@@ -88,6 +96,8 @@ class RAIterator
 		bool			operator>=(const RAIterator &it) const { return(_ptr >= it._ptr); }
 		bool			operator<=(const RAIterator &it) const { return(_ptr <= it._ptr); }
     
+		// Getter
+		pointer			getptr() const { return(_ptr); }
     private:
         pointer  _ptr;
 };
