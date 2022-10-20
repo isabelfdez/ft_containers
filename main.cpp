@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:26:49 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/11 14:41:24 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/20 19:17:41 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,79 +57,12 @@ void    print_vector_std(std::vector<int> v)
 
 int main(void)
 {
-	std::vector<int> v;
-	std::vector<int> v2;
+	ft::vector<int> v1(3, 4);
+	ft::vector<int> v2;
 
-	v.push_back(1);
-	v.push_back(2);
-	v.push_back(3);
-	v.push_back(4);
-	v.push_back(5);
-	v.push_back(6);
-	v.push_back(7);
-	v.push_back(8);
+	v2 = v1;
+	print_vector(v2);
 
-	v2.push_back(10);
-	v2.push_back(20);
-	v2.push_back(30);
-	v2.push_back(40);
-	v2.push_back(50);
-	v2.push_back(60);
-	v2.push_back(70);
-	v2.push_back(80);
-
-
-	std::vector<int>::iterator it2 = v.begin() + 4;
-	std::vector<int>::iterator it3 = v2.begin();
-	std::vector<int>::iterator it4 = v2.begin() + 3;
-	
-	std::vector<int>::const_iterator it = v.begin();
-
-	std::cout << *it2 << std::endl;
-
-
-	std::cout << *it3  << " " << *it4 << std::endl;
-	
-	v.insert(it2, it3, it4);
-	std::cout << *it3  << " " << *it4 << std::endl;
-	print_vector_std(v);
-
-	std::cout << *it2 << std::endl;
-
-	//v.insert(it2, it3, it4);
-	//std::cout << *it3  << " " << *it4 << std::endl;
-	//print_vector_std(v);
-
-	//v.erase(it);
-	//print_vector(v);
-
-    //std::cout << it2[v.size()] << std::endl;
-    
-	//print_vector_std(v);
-	//std::cout << v.size() << " " << v.capacity() << std::endl;
-	//v.erase(it);
-	//print_vector_std(v);
-	//std::cout << v.size() << " " << v.capacity() << std::endl;
-	
-		
-    
-
-
-
-
-
-
-    
-    
-    
-
-    
-
-    
-    
-    //system("leaks a.out");
-
-    return (0);
 }
 
     // ft::vector<int>::iterator it;       // Call to first constructor

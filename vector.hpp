@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/11 14:43:00 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/20 19:21:16 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ class vector
 	// copy(4): Constructs a container with a copy of each of the elements in x, in the same order.
 		vector(const vector& x)
 		{
+			std::cout << "copy";
 			_allocator = x._allocator;
 			_capacity = x.capacity();
 			_size = x.size();
@@ -255,14 +256,14 @@ class vector
 				reAlloc((_size + n >_capacity * 2) ? _size + n : _capacity * 2);
 			for (size_type i = _size + n - 1; i > dist; i--)
 				_allocator.construct(&_data[i], _data[i - n]);
-			for (size_type i = dist; i >= dist2; i--)
+			for (size_type i = dist2; i <= dist; i++)
 				_allocator.construct(&_data[i], val);
 			_size += n;
 		}
 		template <class InputIterator>
-		void			insert(iterator position, InputIterator first, InputIterator last)
+		void			insert(iterator position, InputIterator first, InputIterator last,
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 		{
-
 			size_type dist = 0;
 			if (_size > 0)
 				dist = position - begin();
@@ -279,25 +280,6 @@ class vector
 				_allocator.construct(&_data[i], _data[i - n]);
 			for (size_type i = 0; i < n; i++)
 				_allocator.construct(&_data[dist + i], *(first + i));
-			// size_type 	dist = 0;
-			// size_type 	dist2 = 0;
-			// size_type	n = last - first;
-
-			// if (_size > 0)
-			// {
-			// 	dist = position - this->begin() + n - 1;
-			// 	dist2 = position - this->begin();
-			// }
-			// if (_size + n > _capacity)
-			// 	reAlloc((_size + n >_capacity * 2) ? _size + n : _capacity * 2);
-			// for (size_type i = _size + n - 1; i > dist; i--)
-			// 	_allocator.construct(&_data[i], _data[i - n]);
-			// for (size_type i = dist; i >= dist2; i--)
-			// {
-			// 	_allocator.construct(&_data[i], *last);
-			// 	last--;
-			// }
-			// _size += n;
 		}
 
 
@@ -353,6 +335,17 @@ class vector
 		// operator[]
 		reference		operator[] (size_type n) { return (_data[n]); }
 		const_reference	operator[] (size_type n) const { return (_data[n]); }
+
+		// operator=
+		vector&			operator= (const vector& x)
+		{
+			std::cout << "operator";
+			_allocator = x._allocator;
+			_capacity = x.capacity();
+			_size = x.size();
+			_data = x._data;
+			return (*this);
+		}
 };
 
 }

@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/11 12:56:26 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/20 19:05:29 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ class RAIterator
         RAIterator() : _ptr(NULL) { /*std::cout << "First constructor called" << std::endl;*/ }
         RAIterator(T src) : _ptr(src) { /*std::cout << "Second constructor called" << std::endl;*/ }
         RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ } // CHANGE
-		template <typename S>
-		RAIterator (const RAIterator<S> &other) { _ptr = other.getptr(); }
+		template <typename S> // Needed to convert const iterator to iterator or viceversa
+		RAIterator (const RAIterator<S> &other) { _ptr = other.base(); }
 		
 		//  explicit RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ } // CHANGE
         // template<typename iter>
@@ -58,19 +58,19 @@ class RAIterator
 		// Deference operators
         reference	operator*() const { return(*_ptr); }
 		pointer		operator->() const { return(&(operator*())); }
-        pointer     operator[](difference_type src) const { return (&(_ptr[src])); }
+        reference	operator[](difference_type src) { return (_ptr[src]); }
 		
 		// Increment & decrement operators
-        RAIterator&	operator++() { ++_ptr; return (*this); }
-		RAIterator	operator++(int)
+        RAIterator&	operator++() { ++_ptr; return (*this); } // ++it
+		RAIterator	operator++(int) // it++
 		{
 			RAIterator ret(*this);
 			++_ptr;
 			return ret;
 		}
 
-        RAIterator&	operator--() { --_ptr; return (*this); }
-		RAIterator	operator--(int)
+        RAIterator&	operator--() { --_ptr; return (*this); } // --it
+		RAIterator	operator--(int) // it--
 		{
 			RAIterator ret(*this);
 			--_ptr;
@@ -78,109 +78,61 @@ class RAIterator
 		}
 
 		// Arithmetic operators
-		RAIterator		operator+(const difference_type& n)  const { return (RAIterator(_ptr + n)); }
-		RAIterator		operator-(const int& n) const { return (RAIterator(_ptr - n)); }
-		difference_type	operator-(const RAIterator& it) { return (_ptr - it._ptr); }
+		RAIterator				operator+(const difference_type& n)  const { return (RAIterator(_ptr + n)); }
+		friend RAIterator		operator+(const int& n, const RAIterator& it)  { return (RAIterator(it.base() + n)); }
+		RAIterator				operator-(const int& n) const { return (RAIterator(_ptr - n)); }
+		difference_type			operator-(const RAIterator& it) { return (_ptr - it._ptr); }
+		// friend difference_type	operator-(const RAIterator& it1, const RAIterator& it2)
+		// {
+		// 	return (RAIterator(it.base() + n));
+		// }
 
 		// Assignment operators
-		RAIterator&		operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
-		RAIterator&		operator=(RAIterator &it) { _ptr = it._ptr; return (*this); }
-		RAIterator&		operator+=(const difference_type& n) { _ptr += n; return (*this); }
-		RAIterator&		operator-=(const difference_type& n) { _ptr -= n; return (*this); }
-
-		// Relational operators
-		bool			operator==(const RAIterator &it) const { return(_ptr == it._ptr); }
-		bool			operator!=(const RAIterator &it) const { return(_ptr != it._ptr); }
-		bool			operator>(const RAIterator &it) const { return(_ptr > it._ptr); }
-		bool			operator<(const RAIterator &it) const { return(_ptr < it._ptr); }
-		bool			operator>=(const RAIterator &it) const { return(_ptr >= it._ptr); }
-		bool			operator<=(const RAIterator &it) const { return(_ptr <= it._ptr); }
+		RAIterator&				operator=(const RAIterator &it) { _ptr = it._ptr; return (*this); }
+		RAIterator&				operator=(RAIterator &it) { _ptr = it._ptr; return (*this); }
+		RAIterator&				operator+=(const difference_type& n) { _ptr += n; return (*this); }
+		RAIterator&				operator-=(const difference_type& n) { _ptr -= n; return (*this); }		
     
 		// Getter
-		pointer			getptr() const { return(_ptr); }
+		pointer					base() const { return(_ptr); }
     private:
-        pointer  _ptr;
+        pointer  				_ptr;
 };
 
-// template<typename T>
-// class	VectorIterator : public ft::my_iterator<std::random_access_iterator_tag, T> 
-// {
-// 	public:
-// 		typedef typename ft::iterator_traits<T>				iterator_traits;
-// 		typedef typename iterator_traits::pointer			pointer;
-// 		typedef typename iterator_traits::reference			reference;
-// 		typedef typename iterator_traits::difference_type	difference_type;
-// 		typedef pointer										iterator_type;
+template<class Iterator1, class Iterator2>
+bool	operator==(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+	return lhs.base() == rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool	operator!=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+	return lhs.base() != rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool	operator>(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+	return lhs.base() > rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool	operator>=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+	return lhs.base() >= rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool	operator<(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+	return lhs.base() < rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool	operator<=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+	return lhs.base() <= rhs.base();
+}
+// template<class Iterator>
+// RAIterator<Iterator> operator+(typename RAIterator<Iterator>::difference_type n, const RAIterator<Iterator> &it) {
+// 	RAIterator<Iterator>	tmp(it.base() + n);
+// 	return (tmp);
+// }
+// template<class Iterator, class Iterator2>
+// typename RAIterator<Iterator>::difference_type operator-(const RAIterator<Iterator>& lhs, const RAIterator<Iterator2>& rhs) {
+// 	return (lhs.base() - rhs.base());
+// }
 
-// 		VectorIterator(): _p(NULL) {}
-// 		explicit VectorIterator(iterator_type x): _p(x) {}
-
-// 		template<class U> 
-// 		VectorIterator(const VectorIterator<U> &other) {
-// 			this->_p = other.base();
-// 		}
-
-//		iterator_type	base() const { return (this->_p); }
-//
-//		reference	operator*() const { return (*this->_p); }
-//		pointer		operator->() const { return (this->_p); }
-//
-//		reference	operator[](difference_type index) const { return (*(_p + index)); }
-//
-//		VectorIterator	&operator++() { ++_p; return (*this); }
-//		VectorIterator	operator++(int) { VectorIterator tmp(*this); operator++(); return (tmp); }
-//		VectorIterator	&operator+=(difference_type n) { this->_p += n; return (*this); }
-//		VectorIterator	operator+(difference_type n) const { VectorIterator tmp(*this); tmp._p += n; return (tmp);}
-//
-//		VectorIterator	&operator--() { --_p; return (*this); }
-//		VectorIterator	operator--(int) { VectorIterator tmp(*this); operator--(); return (tmp); }
-//		VectorIterator	&operator-=(difference_type n) { this->_p -= n; return (*this); }
-//		VectorIterator	operator-(difference_type n) const { VectorIterator tmp(*this); tmp._p -= n; return (tmp);}
-//	private:
-//		iterator_type	_p;
-//};
-
-//	template<class Iterator1, class Iterator2>
-//	bool	operator==(const VectorIterator<Iterator1>& lhs, const VectorIterator<Iterator2>& rhs) {
-//		return lhs.base() == rhs.base();
-//	}
-//
-//	template<class Iterator1, class Iterator2>
-//	bool	operator!=(const VectorIterator<Iterator1>& lhs, const VectorIterator<Iterator2>& rhs) {
-//		return lhs.base() != rhs.base();
-//	}
-//
-//	template<class Iterator1, class Iterator2>
-//	bool	operator>(const VectorIterator<Iterator1>& lhs, const VectorIterator<Iterator2>& rhs) {
-//		return lhs.base() > rhs.base();
-//	}
-//
-//	template<class Iterator1, class Iterator2>
-//	bool	operator>=(const VectorIterator<Iterator1>& lhs, const VectorIterator<Iterator2>& rhs) {
-//		return lhs.base() >= rhs.base();
-//	}
-//
-//	template<class Iterator1, class Iterator2>
-//	bool	operator<(const VectorIterator<Iterator1>& lhs, const VectorIterator<Iterator2>& rhs) {
-//		return lhs.base() < rhs.base();
-//	}
-//
-//	template<class Iterator1, class Iterator2>
-//	bool	operator<=(const VectorIterator<Iterator1>& lhs, const VectorIterator<Iterator2>& rhs) {
-//		return lhs.base() <= rhs.base();
-//	}
-//
-//	template<class Iterator>
-//	VectorIterator<Iterator> operator+(typename VectorIterator<Iterator>::difference_type n, const VectorIterator<Iterator> &it) {
-//		VectorIterator<Iterator>	tmp(it.base() + n);
-//		return (tmp);
-//	}
-//
-//	template<class Iterator, class Iterator2>
-//	typename VectorIterator<Iterator>::difference_type operator-(const VectorIterator<Iterator>& lhs, const VectorIterator<Iterator2>& rhs) {
-//		return (lhs.base() - rhs.base());
-//	}
-//
 }
 
 #endif
