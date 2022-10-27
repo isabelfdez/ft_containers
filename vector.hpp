@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/20 19:21:16 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/27 18:10:14 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@
 # include <iostream>
 # include "iterators/iterator_traits.hpp"
 # include "iterators/RAIterator.hpp"
+# include "iterators/reverse_iterator.hpp"
 # include "utils/enable_if.hpp"
 # include "utils/is_integral.hpp"
+# include "algorithms/equal.hpp"
+# include "algorithms/lexicographical_compare.hpp"
 
 
 namespace ft {
@@ -34,12 +37,10 @@ class vector
 		typedef typename allocator_type::reference						reference;			// T&
         typedef typename allocator_type::const_reference				const_reference;	// const T&
         typedef typename allocator_type::size_type						size_type;			// std::size_t
-		//typedef	T													value_type;
-		//typedef size_t												size_type;
 		typedef RAIterator<pointer>										iterator;
 		typedef RAIterator<const_pointer>								const_iterator;
-//		typedef VectorReverseIterator<iterator>							reverse_iterator;
-//		typedef VectorReverseIterator<const_iterator>					const_reverse_iterator;
+		typedef reverse_iterator<iterator>								reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 		typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
 
 	// Constructors & Destructor
@@ -76,7 +77,6 @@ class vector
 	// copy(4): Constructs a container with a copy of each of the elements in x, in the same order.
 		vector(const vector& x)
 		{
-			std::cout << "copy";
 			_allocator = x._allocator;
 			_capacity = x.capacity();
 			_size = x.size();
@@ -339,14 +339,55 @@ class vector
 		// operator=
 		vector&			operator= (const vector& x)
 		{
-			std::cout << "operator";
 			_allocator = x._allocator;
-			_capacity = x.capacity();
+			this->reserve(x._capacity);
 			_size = x.size();
-			_data = x._data;
+			for (size_type i = 0; i < _size; i++)
+    		    _allocator.construct(_data + i, *(x._data + i));
 			return (*this);
 		}
 };
+
+// Relational operators
+
+template <typename T, typename Alloc>
+bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+{
+	if (lhs.size() != rhs.size())
+		return (0);
+	return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+}
+
+template <typename T, typename Alloc>
+bool operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+{
+	return (!(lhs == rhs));
+}
+	
+template <typename T, typename Alloc>
+bool operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+{
+	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+}
+	
+template <typename T, typename Alloc>
+bool operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+{
+	return (!(lhs > rhs));
+}
+	
+template <typename T, typename Alloc>
+bool operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+{
+	return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+}
+
+template <typename T, typename Alloc>
+bool operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+{
+	return (!(lhs < rhs));
+}
+
 
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RAiterator.hpp                                     :+:      :+:    :+:   */
+/*   RAIterator.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/20 19:05:29 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/27 17:23:46 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,24 @@ class RAIterator
         RAIterator(T src) : _ptr(src) { /*std::cout << "Second constructor called" << std::endl;*/ }
         RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ } // CHANGE
 		template <typename S> // Needed to convert const iterator to iterator or viceversa
-		RAIterator (const RAIterator<S> &other) { _ptr = other.base(); }
-		
-		//  explicit RAIterator(const RAIterator &src) : _ptr(src._ptr) { /*std::cout << "Third constructor called" << std::endl;*/ } // CHANGE
-        // template<typename iter>
-		// 	RAIterator(const RAIterator<iter> &src) : _ptr(src) { /*std::cout << "Second constructor called" << std::endl;*/ }
+		RAIterator(const RAIterator<S> &other) { _ptr = other.base(); }
 
 		// Deference operators
-        reference	operator*() const { return(*_ptr); }
-		pointer		operator->() const { return(&(operator*())); }
-        reference	operator[](difference_type src) { return (_ptr[src]); }
+        reference				operator*() const { return(*_ptr); }
+		pointer					operator->() const { return(&(operator*())); }
+        reference				operator[](difference_type src) { return (_ptr[src]); }
 		
 		// Increment & decrement operators
-        RAIterator&	operator++() { ++_ptr; return (*this); } // ++it
-		RAIterator	operator++(int) // it++
+        RAIterator&				operator++() { ++_ptr; return (*this); } // ++it
+		RAIterator				operator++(int) // it++
 		{
 			RAIterator ret(*this);
 			++_ptr;
 			return ret;
 		}
 
-        RAIterator&	operator--() { --_ptr; return (*this); } // --it
-		RAIterator	operator--(int) // it--
+        RAIterator&				operator--() { --_ptr; return (*this); } // --it
+		RAIterator				operator--(int) // it--
 		{
 			RAIterator ret(*this);
 			--_ptr;
