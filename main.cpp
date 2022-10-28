@@ -6,13 +6,19 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:26:49 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/27 18:27:44 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/28 14:23:02 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "vector.hpp"
 # include <vector>
 # include <iostream>
+# include <list>
+
+# define TESTED_NAMESPACE   ft
+# define TESTED_TYPE        int
+# define T_SIZE_TYPE        typename TESTED_NAMESPACE::vector<T>::size_type
+
 
 void    print_vector(ft::vector<int> v)
 {
@@ -55,41 +61,82 @@ void    print_vector_std(std::vector<int> v)
 }
 
 
+template <typename T>
+void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
+{
+	const T_SIZE_TYPE size = vct.size();
+	const T_SIZE_TYPE capacity = vct.capacity();
+	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
+	// Cannot limit capacity's max value because it's implementation dependent
+
+	std::cout << "size: " << size << std::endl;
+	std::cout << "capacity: " << isCapacityOk << std::endl;
+	std::cout << "max_size: " << vct.max_size() << std::endl;
+	if (print_content)
+	{
+		typename TESTED_NAMESPACE::vector<T>::const_iterator it = vct.begin();
+		typename TESTED_NAMESPACE::vector<T>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
+
 int		main(void)
 {
-	const int size = 5;
-	ft::vector<int> vct(size);
-	ft::vector<int>::iterator it_ = vct.begin();
-	ft::vector<int>::reverse_iterator it(it_);
+	std::list<TESTED_TYPE> lst;
+	std::list<TESTED_TYPE>::iterator lst_it;
+	for (int i = 1; i < 5; ++i)
+		lst.push_back(i * 3);
 
-	for (int i = 0; i < size; ++i)
-		vct[i] = (i + 1) * 5;
-	//printSize(vct);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
+	printSize(vct);
 
-	std::cout << (it_ == it.base()) << std::endl;
-	std::cout << (it_ == (it + 3).base()) << std::endl;
+	lst_it = lst.begin();
+	for (int i = 1; lst_it != lst.end(); ++i)
+		*lst_it++ = i * 5;
+	vct.assign(lst.begin(), lst.end());
+	printSize(vct);
 
-	std::cout << *(it.base() + 1) << std::endl;
-	std::cout << *(it - 3) << std::endl;
-	std::cout << *(it - 3).base() << std::endl;
-	it -= 3;
-	std::cout << *it.base() << std::endl;
-
-	std::cout << "TEST OFFSET" << std::endl;
-	std::cout << *(it) << std::endl;
-	std::cout << *(it).base() << std::endl;
-	std::cout << *(it - 0) << std::endl;
-	std::cout << *(it - 0).base() << std::endl;
-	std::cout << *(it - 1).base() << std::endl;
-
+	vct.insert(vct.end(), lst.rbegin(), lst.rend());
+	printSize(vct);
 	return (0);
 }
 
-    // ft::vector<int>::iterator it;       // Call to first constructor
-    // ft::vector<int>::iterator it2;      // Call to first constructor
-    // ft::vector<int>::iterator it3;      // Call to first constructor
+// int main()
+// {
+//     ft::vector<int> v1;
 
+//     //v1.push_back(30);
     
-    // it = myvector.begin(); // begin() makes a call to second constructor
-    // std::cout << *it[1] << std::endl;
-    // it++; // operator++(int) makes a call to third constructor
+//     v1.insert(v1.begin(), 10, 88);
+//     print_vector(v1);
+//     ft::vector<int> v2(v1.begin(), v1.begin() + 3);
+//     print_vector(v2);
+    
+    
+// }
+
+
+// int		main(void)
+// {
+	// std::list<TESTED_TYPE> lst;
+	// std::list<TESTED_TYPE>::iterator lst_it;
+	// for (int i = 1; i < 5; ++i)
+		// lst.push_back(i * 3);
+// 
+	// TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
+	// printSize(vct);
+// 
+	// lst_it = lst.begin();
+	// for (int i = 1; lst_it != lst.end(); ++i)
+		// *lst_it++ = i * 5;
+	// vct.assign(lst.begin(), lst.end());
+	// printSize(vct);
+// 
+	// vct.insert(vct.end(), lst.rbegin(), lst.rend());
+	// printSize(vct);
+	// return (0);
+// }

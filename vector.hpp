@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/27 18:10:14 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/28 14:20:44 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ class vector
 	public: // Member functions in alphabetical order
 		// assign
 		template <typename InputIterator>
-		void			assign(InputIterator first, InputIterator last, 
+		void					assign(InputIterator first, InputIterator last, 
 								typename ft::enable_if<!ft::is_integral<InputIterator>::value,
 								InputIterator>::type * = NULL)
 		{
@@ -135,7 +135,7 @@ class vector
 				first++;
 			}
 		}
-		void			assign(size_type n, const value_type& val)
+		void					assign(size_type n, const value_type& val)
 		{
 			this->clear();
 			if (_size + n > _capacity)
@@ -145,13 +145,13 @@ class vector
 		}
 
 		// at
-		reference		at(size_type n)
+		reference				at(size_type n)
 		{
 			if (n >= _size)
 				throw std::out_of_range("vector");
 			return (_data[n]);
 		}
-		const_reference at(size_type n) const
+		const_reference 		at(size_type n) const
 		{
 			if (n >= _size)
 				throw std::out_of_range("vector");
@@ -159,18 +159,18 @@ class vector
 		}
 
 		// back
-		reference		back() { return _data[_size - 1]; }
-		const_reference	back() const { return _data[_size - 1]; }		
+		reference				back() { return _data[_size - 1]; }
+		const_reference			back() const { return _data[_size - 1]; }		
 		
 		// begin
-		iterator		begin() { return (iterator(_data)); }
-		const_iterator	begin() const { return (const_iterator(_data)); }
+		iterator				begin() { return (iterator(_data)); }
+		const_iterator			begin() const { return (const_iterator(_data)); }
 
 		// capacity
-		size_type		capacity() const { return (_capacity); }
+		size_type				capacity() const { return (_capacity); }
 
 		// clear
-		void			clear()
+		void					clear()
 		{
 			for (size_type i = 0; i < _size; i++)
     		    _allocator.destroy(_data + i);
@@ -178,14 +178,14 @@ class vector
 		}
 
 		// empty
-		bool			empty() const { return(_size == 0); };
+		bool					empty() const { return(_size == 0); };
 
 		// end
-		iterator		end() { return (iterator(&_data[_size])); }
-		const_iterator	end() const { return (const_iterator(&_data[_size])); }
+		iterator				end() { return (iterator(&_data[_size])); }
+		const_iterator			end() const { return (const_iterator(&_data[_size])); }
 
 		// erase
-		iterator		erase(iterator position)
+		iterator				erase(iterator position)
 		{
 			size_type	n = position - this->begin();
 		
@@ -197,7 +197,7 @@ class vector
 			_size--;
 			return (iterator(&_data[n]));
 		}
-		iterator		erase(iterator first, iterator last)
+		iterator				erase(iterator first, iterator last)
 		{
 			size_type	n = first - this->begin();
 			size_type	l = last - first;
@@ -221,14 +221,14 @@ class vector
 		}
 		
 		// front
-		reference		front() { return _data[0]; }
-		const_reference	front() const { return _data[0]; }
+		reference				front() { return _data[0]; }
+		const_reference			front() const { return _data[0]; }
 
 		// get_allocator
-		allocator_type	get_allocator() { return _allocator; }
+		allocator_type			get_allocator() { return _allocator; }
 
 		// insert
-		iterator		insert(iterator position, const value_type& val)
+		iterator				insert(iterator position, const value_type& val)
 		{
 			size_type	dist = 0;
 
@@ -242,16 +242,16 @@ class vector
 			_size++;
 			return position;
 		}
-		void			insert(iterator position, size_type n, const value_type& val)
+		void					insert(iterator position, size_type n, const value_type& val)
 		{
 			size_type 	dist = 0;
 			size_type 	dist2 = 0;
 
-			if (_size > 0)
-			{
+			//if (_size > 0)
+			//{
 				dist = position - this->begin() + n - 1;
 				dist2 = position - this->begin();
-			}
+			//}
 			if (_size + n > _capacity)
 				reAlloc((_size + n >_capacity * 2) ? _size + n : _capacity * 2);
 			for (size_type i = _size + n - 1; i > dist; i--)
@@ -261,8 +261,9 @@ class vector
 			_size += n;
 		}
 		template <class InputIterator>
-		void			insert(iterator position, InputIterator first, InputIterator last,
-						typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+		void					insert(iterator position, InputIterator first, InputIterator last,
+								typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+								InputIterator>::type* = NULL)
 		{
 			size_type dist = 0;
 			if (_size > 0)
@@ -284,10 +285,10 @@ class vector
 
 
 		// max_size
-		size_type		max_size() const { return _allocator.max_size(); }
+		size_type				max_size() const { return _allocator.max_size(); }
 
 		// pop_back
-		void			pop_back()
+		void					pop_back()
 		{
 			_allocator.destroy(_data + _size - 1);
 			_size--;
@@ -295,7 +296,7 @@ class vector
 		}
 
 		// push_back
-		void			push_back(const value_type& val)
+		void					push_back(const value_type& val)
 		{
 			if (_size == _capacity) // Hay que tener en cuenta el tamaño del dato que meto
 				reAlloc((_capacity > 0) ? 2 * _capacity : 1);
@@ -304,15 +305,23 @@ class vector
 			//_data[_size++] = val;
 		}
 
+		// rbegin
+		reverse_iterator		rbegin() { return (reverse_iterator(this->end())); }
+		const_reverse_iterator	rbegin() const { return (const_reverse_iterator(this->end())); }
+
+		// rend
+		reverse_iterator		rend() { return (reverse_iterator(this->begin())); }
+		const_reverse_iterator	rend() const { return (const_reverse_iterator(this->begin())); }
+
 		// reserve
-		void			reserve(size_type n)
+		void					reserve(size_type n)
 		{
 			if (n > _capacity)
 				reAlloc(n);
 		}
 
 		//resize
-		void			resize(size_type n, value_type val = value_type())
+		void					resize(size_type n, value_type val = value_type())
 		{
 			if (n < _size)
 				for (size_type i = n; i < _size; i++)
@@ -330,14 +339,14 @@ class vector
 		}
 		
 		// size
-		size_type		size(void) const	{ return (_size); }
+		size_type				size(void) const	{ return (_size); }
 
 		// operator[]
-		reference		operator[] (size_type n) { return (_data[n]); }
-		const_reference	operator[] (size_type n) const { return (_data[n]); }
+		reference				operator[] (size_type n) { return (_data[n]); }
+		const_reference			operator[] (size_type n) const { return (_data[n]); }
 
 		// operator=
-		vector&			operator= (const vector& x)
+		vector&					operator= (const vector& x)
 		{
 			_allocator = x._allocator;
 			this->reserve(x._capacity);

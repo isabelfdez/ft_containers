@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/27 17:23:46 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/28 14:29:14 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,27 +96,33 @@ class RAIterator
 };
 
 template<class Iterator1, class Iterator2>
-bool	operator==(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+bool	operator==(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs)
+{
 	return lhs.base() == rhs.base();
 }
 template<class Iterator1, class Iterator2>
-bool	operator!=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+bool	operator!=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs)
+{
 	return lhs.base() != rhs.base();
 }
 template<class Iterator1, class Iterator2>
-bool	operator>(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+bool	operator>(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs)
+{
 	return lhs.base() > rhs.base();
 }
 template<class Iterator1, class Iterator2>
-bool	operator>=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+bool	operator>=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs)
+{
 	return lhs.base() >= rhs.base();
 }
 template<class Iterator1, class Iterator2>
-bool	operator<(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+bool	operator<(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs)
+{
 	return lhs.base() < rhs.base();
 }
 template<class Iterator1, class Iterator2>
-bool	operator<=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs) {
+bool	operator<=(const RAIterator<Iterator1>& lhs, const RAIterator<Iterator2>& rhs)
+{
 	return lhs.base() <= rhs.base();
 }
 // template<class Iterator>

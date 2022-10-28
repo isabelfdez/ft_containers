@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 17:12:15 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/27 18:26:40 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/10/28 13:22:03 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define REVERSE_ITERATOR_HPP
 
 # include "iterator_traits.hpp"
+# include "RAIterator.hpp"
 
 namespace ft {
 
@@ -70,12 +71,12 @@ class reverse_iterator
 		};
 
 		// Arithmetic operators
-		reverse_iterator				operator+(difference_type n) const { return (_it + n); }
-		reverse_iterator				operator-(difference_type n) const { return (_it - n); }
+		reverse_iterator				operator+(difference_type n) const { return reverse_iterator(_it - n); }
+		reverse_iterator				operator-(difference_type n) const { return reverse_iterator(_it + n); }
 		
 		// Assignment operators
-		reverse_iterator&				operator+= (difference_type n) { _it += n; return (*this); }
-		reverse_iterator&				operator-= (difference_type n) { _it -= n; return (*this); }
+		reverse_iterator&				operator+= (difference_type n) { _it -= n; return (*this); }
+		reverse_iterator&				operator-= (difference_type n) { _it += n; return (*this); }
 
 		// Getter
 		iterator_type					base() const { return(_it); }
@@ -83,40 +84,54 @@ class reverse_iterator
         iterator_type  					_it;
 };
 
-template <typename Iterator>
-bool operator== (const reverse_iterator<Iterator>& lhs,
-const reverse_iterator<Iterator>& rhs){
+template <typename Iterator1, typename Iterator2>
+bool operator==(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+{
 	return (lhs.base() == rhs.base());
 }
 
-template <typename Iterator>
-bool operator!= (const reverse_iterator<Iterator>& lhs,
-const reverse_iterator<Iterator>& rhs){
+template <typename Iterator1, typename Iterator2>
+bool operator!=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+{
 	return (lhs.base() != rhs.base());
 }
 
-template <typename Iterator>
-bool operator<  (const reverse_iterator<Iterator>& lhs,
-const reverse_iterator<Iterator>& rhs){
+template <typename Iterator1, typename Iterator2>
+bool operator<(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+{
 	return (lhs.base() > rhs.base());
 }
 
-template <typename Iterator>
-bool operator<= (const reverse_iterator<Iterator>& lhs,
-const reverse_iterator<Iterator>& rhs){
+template <typename Iterator1, typename Iterator2>
+bool operator<=(const reverse_iterator<Iterator1>& lhs,	const reverse_iterator<Iterator2>& rhs)
+{
 	return (lhs.base() >= rhs.base());
 }
 
-template <typename Iterator>
-bool operator> (const reverse_iterator<Iterator>& lhs,
-const reverse_iterator<Iterator>& rhs){
+template <typename Iterator1, typename Iterator2>
+bool operator>(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs){
 	return (lhs.base() < rhs.base());
 }
 
-template <typename Iterator>
-bool operator>= (const reverse_iterator<Iterator>& lhs,
-const reverse_iterator<Iterator>& rhs){
+template <typename Iterator1, typename Iterator2>
+bool operator>=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs){
 	return (lhs.base() <= rhs.base());
+}
+
+template <typename Iterator1, typename Iterator2>
+typename reverse_iterator<Iterator1>::difference_type
+    operator-(const reverse_iterator<Iterator1>& lhs,
+               const reverse_iterator<Iterator2>& rhs)
+{
+	return (-(lhs.base() - rhs.base()));
+}
+
+template <typename Iterator>
+reverse_iterator<Iterator>
+    operator+( typename reverse_iterator<Iterator>::difference_type n,
+               const reverse_iterator<Iterator>& it )
+{
+	return (reverse_iterator<Iterator>(it.base() - n));
 }
 
 }
