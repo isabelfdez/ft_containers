@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 12:55:28 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/28 14:20:44 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/11/03 19:18:59 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,38 @@ class vector
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = NULL) :
 			_data(NULL), _size(0), _capacity(0), _allocator(alloc)
 		{
-			if (last > first)
+			if (last != first)
 			{
-				reAlloc(last - first);
-				while (first < last)
+				difference_type	dif = 0;
+				InputIterator	it(first);
+				while (it != last)
+				{
+					dif++;
+					it++;
+				}
+				reAlloc(dif);
+				while (first != last)
 				{
 					this->push_back(*first);
 					first++;
 				}
 			}
 		}
+		// template <typename InputIterator>
+		// vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+		// 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = NULL) :
+		// 	_data(NULL), _size(0), _capacity(0), _allocator(alloc)
+		// {
+		// 	if (last > first)
+		// 	{
+		// 		reAlloc(last - first);
+		// 		while (first < last)
+		// 		{
+		// 			this->push_back(*first);
+		// 			first++;
+		// 		}
+		// 	}
+		// }
 	// copy(4): Constructs a container with a copy of each of the elements in x, in the same order.
 		vector(const vector& x)
 		{
@@ -129,7 +151,7 @@ class vector
 								InputIterator>::type * = NULL)
 		{
 			this->clear();
-			while (first < last)
+			while (first != last) // CHANGE
 			{
 				this->push_back(*first);
 				first++;
@@ -268,7 +290,14 @@ class vector
 			size_type dist = 0;
 			if (_size > 0)
 				dist = position - begin();
-			size_type n = last - first;
+			difference_type	dif = 0;
+			InputIterator	it(first);
+			while (it != last) // CHANGE
+			{
+				dif++;
+				it++;
+			}
+			size_type n = dif;
 			if (_size + n > _capacity)
 			{
 				if (n > _size)
@@ -279,8 +308,13 @@ class vector
 			_size += n;
 			for (size_type i = _size - 1; i > dist; i--)
 				_allocator.construct(&_data[i], _data[i - n]);
+			InputIterator	it2(first);
 			for (size_type i = 0; i < n; i++)
-				_allocator.construct(&_data[dist + i], *(first + i));
+			{
+				_allocator.construct(&_data[dist + i], *(it2));
+				it2++;
+				// _allocator.construct(&_data[dist + i], *(first + i)); CHANGE
+			}
 		}
 
 
@@ -340,6 +374,25 @@ class vector
 		
 		// size
 		size_type				size(void) const	{ return (_size); }
+
+		//swap
+
+		void					swap(vector& x)
+		{
+			pointer		aux;
+			size_type	aux_cap;
+			size_type	aux_size;
+			
+			aux = this->_data;
+			this->_data = x._data;
+			x._data = aux;
+			aux_cap = this->_capacity;
+			this->_capacity = x.capacity();
+			x._capacity = aux_cap;
+			aux_size = this->_size;
+			this->_size = x.size();
+			x._size = aux_size;
+		}
 
 		// operator[]
 		reference				operator[] (size_type n) { return (_data[n]); }

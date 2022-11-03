@@ -5,3 +5,5 @@ test*.cpp
 *.txt
 **/containers_test
 a.out.dSYM
+common.hpp
+base.hpp
