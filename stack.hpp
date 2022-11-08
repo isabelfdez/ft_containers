@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:48:43 by isfernan          #+#    #+#             */
-/*   Updated: 2022/11/03 20:24:10 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/11/08 12:54:48 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class stack
 		explicit stack(const container_type& ctnr = container_type()) : _ctnr(ctnr) { }
 
 	protected:
-		container_type	_ctnr;
+		container_type		_ctnr;
 
 	public: // Member functions in alphabetical order
 		// empty
@@ -46,46 +46,50 @@ class stack
 		//top
 		value_type&			top() { return (this->_ctnr.back()); }
 		const value_type&	top() const { return (this->_ctnr.back()); }
+
+		// operators
+		// template <typename T1, typename Cont>
+		// friend bool			operator==(const stack<T1, Cont>& lhs, const stack<T1, Cont>& rhs)
+		// {
+		// 	return (lhs._ctnr == rhs._ctnr);
+		// }
+	
+		// template <typename T1, typename Cont>
+		// friend bool			operator<(const stack<T1, Cont>& lhs, const stack<T1, Cont>& rhs)
+		// {
+		// 	return (lhs._ctnr < rhs._ctnr);
+		// }
+		template <class A, class B>
+		friend bool			operator==(const stack<A,B> &lhs, const stack<A,B> &rhs);
+		template <class A, class B>
+		friend bool			operator!=(const stack<A,B> &lhs, const stack<A,B> &rhs);
+		template <class A, class B>
+		friend bool			operator<(const stack<A,B> &lhs, const stack<A,B> &rhs);
+		template <class A, class B>
+		friend bool			operator<=(const stack<A,B> &lhs, const stack<A,B> &rhs);
+		template <class A, class B>
+		friend bool			operator>(const stack<A,B> &lhs, const stack<A,B> &rhs);
+		template <class A, class B>
+		friend bool			operator>=(const stack<A,B> &lhs, const stack<A,B> &rhs);
 };
 
-template <typename T, typename Container>
-bool	operator==(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	return (lhs._ctnr == rhs._ctnr);
-}
+template <class T, class Container>
+bool operator==(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs._ctnr == rhs._ctnr; }
 
-template <typename T, typename Container>
-bool	operator!=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	return (lhs._ctnr != rhs._ctnr);
-}
-	
-template <typename T, typename Container>
-bool	operator<(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	return (lhs._ctnr < rhs._ctnr);
-}
-	
-template <typename T, typename Container>
-bool	operator<=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	return (lhs._ctnr <= rhs._ctnr);
-}
-	
-template <typename T, typename Container>
-bool	operator>(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	return (lhs._ctnr > rhs._ctnr);
-}
+template <class T, class Container>
+bool operator!=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs._ctnr != rhs._ctnr; }
 
-template <typename T, typename Container>
-bool	operator>=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	return (lhs._ctnr >= rhs._ctnr);
-}
+template <class T, class Container>
+bool operator<(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs._ctnr < rhs._ctnr; }
 
+template <class T, class Container>
+bool operator<=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs._ctnr <= rhs._ctnr; }
 
+template <class T, class Container>
+bool operator>(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs._ctnr > rhs._ctnr; }
 
+template <class T, class Container>
+bool operator>=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs._ctnr >= rhs._ctnr; }
 
 }
 
