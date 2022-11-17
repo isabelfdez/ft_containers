@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:26:49 by isfernan          #+#    #+#             */
-/*   Updated: 2022/11/08 12:36:15 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/11/15 16:25:23 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ int		main(void)
 
 	cmp(stck, stck2); // 6
 	cmp(stck2, stck); // 7
+	system("leaks a.out");
 	return (0);
 }
