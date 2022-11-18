@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 14:16:12 by isfernan          #+#    #+#             */
-/*   Updated: 2022/11/17 20:22:34 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/11/18 17:30:44 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 namespace ft{
 
-template <typename T, typename Compare, typename Alloc = std::allocator<Node<T> > >
+template <typename T, typename Compare, typename Alloc = std::allocator<T> >
 class BSTNode
 {
 	public:
@@ -35,6 +35,15 @@ class BSTNode
 		private:
 			key_compare				_comp;
 			allocator_type			_alloc;
+			
+			BSTNode*				min_node(BSTNode *node)
+			{
+				if (node->left)
+					min_node(node->left);
+				else if (node->right)
+					min_node(node->right)
+				return (node);
+			}
 	
 		public:
 		// Constructors & Destructor
@@ -73,8 +82,8 @@ class BSTNode
 		// Getters
 
 		allocator_type	get_allocator(void) const { return (this->_alloc); 	}
-
 		key_compare		key_comp(void) const { return (this->_comp); }
+		size_type		max_size(void) const { return (this->_alloc.max_size()); }
 
 		// Insert
 		// HE CAMBIADO DATA POR D, REVISAR SI ESTA BIEN
@@ -116,33 +125,59 @@ class BSTNode
 			// Case 0: no root
 			if (!root)
 				return (root);
-			// Case 1: leaf node
-			if (!root->right && !root->left)
-			{
-				this->_alloc.destroy(root);
-				this->_alloc.deallocate(root, 1);
-			}
-			// Case 2: 1 left child
-			if (!root->right)
-			{
-				temp = root->left;
-				temp->parent = root->parent;
-				this->_alloc.destroy(root);
-				this->_alloc.deallocate(root, 1);
-			}
-			// Case 3: 1 right child
-			if (!root->left)
-			{
-				temp = root->right;
-				temp->parent = root->parent;
-				this->_alloc.destroy(root);
-				this->_alloc.deallocate(root, 1);
-			}
-			// Case 4: 2 children
+			else if (this->_comp(root->data.first, data.first))
+				root->right = deleteNode(root->right, data);
+			else if (this->_comp(data.first, root->data.first))
+				root->left = deleteNode(root->left, data);
 			else
 			{
-				
+				// Case 1: leaf node
+				if (!root->right && !root->left)
+				{
+					this->_alloc.destroy(root);
+					this->_alloc.deallocate(root, 1);
+				}
+				// Case 2: 1 left child
+				if (!root->right)
+				{
+					temp = root->left;
+					temp->parent = root->parent;
+					this->_alloc.destroy(root);
+					this->_alloc.deallocate(root, 1);
+				}
+				// Case 3: 1 right child
+				if (!root->left)
+				{
+					temp = root->right;
+					temp->parent = root->parent;
+					this->_alloc.destroy(root);
+					this->_alloc.deallocate(root, 1);
+				}
+				// Case 4: 2 children
+				else
+				{
+					temp = min_node(root->right);
+					root->data = temp->data;
+					deleteNode(temp, temp->data);					
+				}
 			}
+		}
+
+		// Clean
+		void			clean(Bst** root)
+		{
+			if (!(*root))
+				return ;
+			if ((*root)->left)
+				clean(&((*root)->left));
+			if ((*root)->right)
+				clean(&((*root)->right));
+			(*root)->left = 0;
+			(*root)->right = 0;
+			this->_alloc.destroy(*root);
+			this->_alloc.deallocate(*root, 1);
+			*root = 0;
+			return ;
 		}
 };
 

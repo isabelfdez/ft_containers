@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 12:55:18 by isfernan          #+#    #+#             */
-/*   Updated: 2022/11/08 14:12:59 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/11/18 17:32:00 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include "utils/pair.hpp"
+# include "utils/BSTNode.hpp"
 
 namespace ft {
 
