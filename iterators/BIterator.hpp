@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 14:14:30 by isfernan          #+#    #+#             */
-/*   Updated: 2022/11/22 16:13:05 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/01 13:13:47 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,106 +36,121 @@ class BIterator
     private:
         node_ptr	_node;
         node_ptr	_end;
-        node_ptr	_beginning;
+        node_ptr	_beg;
 
 	public:
-		BIterator(node_ptr node = 0) : _node(node) { }
-
-		Iterate(node_ptr node)
+		BIterator(node_ptr node = 0) : _node(node)
 		{
-			node_ptr smallest = Leftmost(node);
-			while (node)
+			node_ptr	tmp(node);
+
+			if (node)
 			{
-				std::cout << node->data << std::endl;
-				node = Next(node);
+				while (tmp->parent)
+					tmp = tmp->parent;
+				while (tmp->left)
+					tmp = tmp->left;
+				this->_beg = tmp;
+				tmp = node;
+				while (tmp->parent)
+					tmp = tmp->parent;
+				while (tmp->right)
+					tmp = tmp->right;
+				this->_end = tmp;
 			}
+			else
+			{
+				this->_beg = 0;
+				this->_end = 0;
+			}
+			return ;
 		}
 
-	private:
-		node_ptr Leftmost(node_ptr node)
+		template < typename UNode, typename U >
+		BIterator(const BIterator<UNode, U>& other)
+			: _node(other.root()), _beg(other.begin()), _end(other.end())
 		{
-		    if (node == nullptr)
-		        return nullptr;
-		    while (node->left != nullptr)
-		        node = node->left;
-		    return node;
+			return ;
 		}
-		
-		// Start iterating from a root node
-		node_ptr First(node_ptr root)
-		{
-		    return Leftmost(root);
-		}
-		
-		// The iteration is current at node.  Return the next node
-		// in value order.
-		node_ptr Next(node_ptr node)
-		{
-		    // Make sure that the caller hasn't failed to stop.
-		    assert(node != nullptr);
-		
-		    // If we have a right subtree we must iterate over it,
-		    // starting at its leftmost (minimal) node.
-		
-		    if (node->right != nullptr)
-		        return Leftmost(node->right);
-		
-		    // Otherwise we must go up the tree
-		
-		    node_ptr* parent = node->parent;
-		    if (parent == nullptr)
-		        return nullptr;
-		
-		    // A node comes immediately after its left subtree
-		
-		    if (node == parent->left)
-		        return parent;
-		
-		    // This must be the right subtree!
-		    assert(node == parent->right);
-		
-		    // In which case we need to go up again, looking for a node that is
-		    // its parent's left child.
-		
-		    while (parent != nullptr && node != parent->left)
-		    {
-		        node = parent;
-		        parent = node->parent;
-		    }
-		
-		    // We should be at a left child!
-		    assert(parent == nullptr || node == parent->left);
-		
-		    // And, as we know, a node comes immediately after its left subtree
-		
-		    return parent;
-		}
-		
-    // Constructors & destructor
-        // BIterator(node_ptr node = 0) : _node(node)
-        // {
-        //     node_ptr	tmp(node);
 
-		// 	if (node && (tmp || tmp == this->_end))
-		// 	{
-		// 		while (tmp->parent && tmp->parent->parent)
-		// 			tmp = tmp->parent;
-		// 		while (tmp->left)
-		// 			tmp = tmp->left;
-		// 		this->_beg = tmp;
-		// 		tmp = node;
-		// 		while (tmp->parent)
-		// 			tmp = tmp->parent;
-		// 		this->_end = tmp;
-		// 	}
-		// 	else
-		// 	{
-		// 		this->_beg = 0;
-		// 		this->_end = 0;
-		// 	}
-		// 	return ;
-        // }
-        
+		/** Destructor **/
+		~BIterator(void) {}
+
+		BIterator&	operator=(const BIterator& other)
+		{
+			this->_node = other.root();
+			this->_beg = other.begin();
+			this->_end = other.end();
+			return (*this);
+		}
+
+		/** Member Functions **/
+		node_ptr	root(void) const { return (this->_node); }
+
+		node_ptr	begin(void) const { return (this->_beg); }
+
+		node_ptr	end(void) const { return (this->_end); }
+
+		/** Member Functions **/
+		reference		operator*(void) const { return (this->_node->data); }
+		pointer			operator->(void) const { return (&(this->_node->data)); }
+
+		BIterator&	operator++(void)
+		{
+			node_ptr	output;
+
+			output = this->_node;
+			if (output && output->right)
+			{
+				output = output->right;
+				while (output->left)
+					output = output->left;
+			}
+			else if (output != this->_end)
+			{
+				while (output->parent && output != output->parent->left)
+					output = output->parent;
+				output = output->parent;
+			}
+			this->_node = output;
+			return (*this);
+		}
+
+		BIterator		operator++(int)
+		{
+			BIterator	output(*this);
+
+			++(*this);
+			return (output);
+		}
+
+		BIterator&	operator--(void)
+		{
+			node_ptr	output;
+
+			output = this->_node;
+			if (output->left)
+			{
+				output = output->left;
+				while (output->right)
+					output = output->right;
+			}
+			else if (output != this->_beg)
+			{
+				while (output->parent && output != output->parent->right)
+					output = output->parent;
+				output = output->parent;
+			}
+			this->_node = output;
+			return (*this);
+		}
+
+		BIterator		operator--(int)
+		{
+			BIterator	output(*this);
+
+			--(*this);
+			return (output);
+		}        
 };
 
 
