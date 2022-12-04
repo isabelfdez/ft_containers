@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 12:55:18 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/01 13:24:15 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/04 13:16:50 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class map
 {
 	public:
 	// Redefinition of member types
-		typedef BSTree<ft::pair<Key, T>, Compare, Alloc>		BST;
+		typedef BSTNode<ft::pair<Key, T>, Compare, Alloc>		BST;
 		typedef Key												key_type;
 		typedef T												mapped_type;
 		typedef Compare											key_compare;

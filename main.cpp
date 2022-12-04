@@ -6,60 +6,21 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:26:49 by isfernan          #+#    #+#             */
-/*   Updated: 2022/11/15 16:25:23 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/04 18:35:13 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "common.hpp"
+#include "utils/BSTNode.hpp"
+#include "utils/pair.hpp"
 
-#define TESTED_TYPE int
-#define t_stack_ TESTED_NAMESPACE::stack<TESTED_TYPE>
-typedef t_stack_::container_type container_type;
-
-template <class T_STACK>
-void	cmp(const T_STACK &lhs, const T_STACK &rhs)
+int main()
 {
-	static int i = 0;
+	ft::BSTNode<ft::pair<int, char>, std::less<int>, std::allocator<ft::pair<const int, char> > > *node = NULL;
 
-	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
-	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
-	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
-	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
-}
+	//ft::BSTNode<ft::pair<int, char>, std::less<int>, std::allocator<ft::pair<const int, char> > > *node2(node);
 
-int		main(void)
-{
-	container_type	ctnr;
-
-	ctnr.push_back(21);
-	ctnr.push_back(42);
-	ctnr.push_back(1337);
-	ctnr.push_back(19);
-	ctnr.push_back(0);
-	ctnr.push_back(183792);
-
-	t_stack_	stck(ctnr);
-	t_stack_	stck2(ctnr);
-
-	cmp(stck, stck);  // 0
-	cmp(stck, stck2); // 1
-
-	stck2.push(60);
-	stck2.push(61);
-	stck2.push(62);
-
-	cmp(stck, stck2); // 2
-	cmp(stck2, stck); // 3
-
-	stck.push(42);
-
-	cmp(stck, stck2); // 4
-	cmp(stck2, stck); // 5
-
-	stck.push(100);
-
-	cmp(stck, stck2); // 6
-	cmp(stck2, stck); // 7
-	system("leaks a.out");
-	return (0);
+	ft::pair<int, char> pair = ft::make_pair<int, char>(3, 'c');
+	node->insert(node, pair);
+	//ft::BSTNode<ft::pair<int, char>, std::less<int>, std::allocator<ft::pair<const int, char> > > *searched = node->search(node, pair);
+	
 }

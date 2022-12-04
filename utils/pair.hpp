@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 14:15:29 by isfernan          #+#    #+#             */
-/*   Updated: 2022/11/08 13:42:26 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/04 12:56:01 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ bool operator>= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 { return !(lhs < rhs); }
 
 template <class T1,class T2>
-ft::pair<T1,T2> make_pair(T1 x, T2 y)
-{
-	return ft::pair<T1, T2>(x, y);
-}
+ft::pair<T1,T2> make_pair(T1 x, T2 y) { return ft::pair<T1, T2>(x, y); }
 
 }
 

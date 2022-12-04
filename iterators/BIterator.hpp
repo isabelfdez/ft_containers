@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 14:14:30 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/01 13:13:47 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/04 12:32:32 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ class BIterator
 		/** Destructor **/
 		~BIterator(void) {}
 
-		BIterator&	operator=(const BIterator& other)
+		BIterator&		operator=(const BIterator& other)
 		{
 			this->_node = other.root();
 			this->_beg = other.begin();
@@ -84,35 +84,22 @@ class BIterator
 		}
 
 		/** Member Functions **/
-		node_ptr	root(void) const { return (this->_node); }
-
-		node_ptr	begin(void) const { return (this->_beg); }
-
-		node_ptr	end(void) const { return (this->_end); }
+		node_ptr		root(void) const { return (this->_node); }
+		node_ptr		begin(void) const { return (this->_beg); }
+		node_ptr		end(void) const { return (this->_end); }
 
 		/** Member Functions **/
 		reference		operator*(void) const { return (this->_node->data); }
 		pointer			operator->(void) const { return (&(this->_node->data)); }
 
-		BIterator&	operator++(void)
+		BIterator&		operator++(void)
 		{
-			node_ptr	output;
+			node_ptr	tmp(this->_node);
 
-			output = this->_node;
-			if (output && output->right)
+			if (this->_node->right)
 			{
-				output = output->right;
-				while (output->left)
-					output = output->left;
+				
 			}
-			else if (output != this->_end)
-			{
-				while (output->parent && output != output->parent->left)
-					output = output->parent;
-				output = output->parent;
-			}
-			this->_node = output;
-			return (*this);
 		}
 
 		BIterator		operator++(int)
@@ -123,7 +110,7 @@ class BIterator
 			return (output);
 		}
 
-		BIterator&	operator--(void)
+		BIterator&		operator--(void)
 		{
 			node_ptr	output;
 
@@ -159,3 +146,21 @@ class BIterator
 
 
 #endif
+
+// node_ptr	output;
+
+			// output = this->_node;
+			// if (output && output->right)
+			// {
+			// 	output = output->right;
+			// 	while (output->left)
+			// 		output = output->left;
+			// }
+			// else if (output != this->_end)
+			// {
+			// 	while (output->parent && output != output->parent->left)
+			// 		output = output->parent;
+			// 	output = output->parent;
+			// }
+			// this->_node = output;
+			// return (*this);
