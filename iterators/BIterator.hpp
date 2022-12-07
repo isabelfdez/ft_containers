@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 14:14:30 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/07 13:18:26 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/07 15:32:18 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class BIterator
 		BIterator(node_ptr node = 0) : _node(node)
 		{
 			node_ptr	tmp(node);
+			node_ptr	tmp2(node);
 
 			if (node)
 			{
@@ -50,12 +51,11 @@ class BIterator
 				while (tmp->left)
 					tmp = tmp->left;
 				this->_beg = tmp;
-				tmp = node;
-				while (tmp->parent)
-					tmp = tmp->parent;
-				while (tmp->right)
-					tmp = tmp->right;
-				this->_end = tmp;
+				while (tmp2->parent)
+					tmp2 = tmp2->parent;
+				while (tmp2->right)
+					tmp2 = tmp2->right;
+				this->_end = tmp2;
 			}
 			else
 			{

@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 12:55:18 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/07 13:38:59 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/07 14:58:52 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ class map
 		};
 
 	
-	private:
+	//private:
 		allocator_type	_alloc;
 		key_compare		_comp;
 		BST				_Tree;
@@ -84,10 +84,49 @@ class map
 			this->_comp = comp;
 			this->_root = 0;
 			this->_end = 0;
-			//this->_end = this->_Tree.insert(this->_end, value_type());
+			this->_end = this->_Tree.insert(this->_end, value_type());
 			this->_size = 0;
 			return ;
 		}
+
+		// template < class InputIt >
+		// map(InputIt first, InputIt last, const key_compare& comp = key_compare(),
+		// 	const allocator_type& alloc = allocator_type())
+		// {
+		// 	this->_root = 0;
+		// 	this->_end = 0;
+		// 	this->_end = this->_Tree.insert(this->_end, value_type());
+		// 	this->_size = 0;
+		// 	this->_comp = comp;
+		// 	this->_alloc = alloc;
+		// 	while (first != last)
+		// 	{
+		// 		this->insert(*first);
+		// 		first++;
+		// 	}
+		// 	return ;
+		// }
+
+		// map(const map& other)
+		// {
+		// 	const_iterator	first(other.begin());
+
+		// 	this->_root = 0;
+		// 	this->_end = 0;
+		// 	this->_end = this->_Tree.insert(this->_end, value_type());
+		// 	this->_size = 0;
+		// 	this->_comp = other._comp;
+		// 	this->_alloc = other._alloc;
+		// 	if (other._size > 0)
+		// 	{
+		// 		while (first != other.end())
+		// 		{
+		// 			this->insert(*first);
+		// 			first++;
+		// 		}
+		// 	}
+		// 	return ;
+		// }
 
 		ft::pair<iterator, bool>	insert(const value_type& val)
 		{

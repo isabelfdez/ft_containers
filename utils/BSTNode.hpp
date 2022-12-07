@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 14:16:12 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/07 13:40:44 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/07 15:38:50 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ class BSTNode
 				this->parent = 0;
 				return ;
 			}
+
+			~BSTNode(void) {}
 	
 			// BSTNode(BSTNode const& copy)
 			// {
@@ -113,7 +115,6 @@ class BSTNode
 			// Find
 			BSTNode*		search(BSTNode *root, value_type d) const
 			{
-				std::cout << "entra al search" << std::endl;
 				if (!root || root->data.first == d.first)
 					return (root);
 				else if (this->_comp(d.first, root->data.first))
@@ -164,6 +165,7 @@ class BSTNode
 						deleteNode(temp, temp->data);					
 					}
 				}
+				return temp;
 			}
 	
 			// Clean
