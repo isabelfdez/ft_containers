@@ -6,21 +6,46 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:26:49 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/04 18:35:13 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/07 13:39:55 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils/BSTNode.hpp"
-#include "utils/pair.hpp"
 
-int main()
+#include "common.hpp"
+
+#define T1 char
+#define T2 double
+typedef TESTED_NAMESPACE::map<T1, T2> _map;
+typedef _map::const_iterator const_it;
+
+static unsigned int i = 0;
+
+void	ft_comp(const _map &mp, const const_it &it1, const const_it &it2)
 {
-	ft::BSTNode<ft::pair<int, char>, std::less<int>, std::allocator<ft::pair<const int, char> > > *node = NULL;
+	bool res[2];
 
-	//ft::BSTNode<ft::pair<int, char>, std::less<int>, std::allocator<ft::pair<const int, char> > > *node2(node);
-
-	ft::pair<int, char> pair = ft::make_pair<int, char>(3, 'c');
-	node->insert(node, pair);
-	//ft::BSTNode<ft::pair<int, char>, std::less<int>, std::allocator<ft::pair<const int, char> > > *searched = node->search(node, pair);
-	
+	std::cout << "\t-- [" << ++i << "] --" << std::endl;
+	res[0] = mp.key_comp()(it1->first, it2->first);
+	res[1] = mp.value_comp()(*it1, *it2);
+	std::cout << "with [" << it1->first << " and " << it2->first << "]: ";
+	std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
 }
+
+int		main(void)
+{
+	_map	mp;
+
+	mp['a'] = 2.3;
+	mp['b'] = 1.4;
+	mp['c'] = 0.3;
+	mp['d'] = 4.2;
+	// printSize(mp);
+
+	// for (const_it it1 = mp.begin(); it1 != mp.end(); ++it1)
+	// 	for (const_it it2 = mp.begin(); it2 != mp.end(); ++it2)
+	// 		ft_comp(mp, it1, it2);
+
+	// printSize(mp);
+	return (0);
+}
+

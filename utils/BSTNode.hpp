@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 14:16:12 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/04 18:38:36 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/07 13:40:44 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ class BSTNode
 		BSTNode						*parent;
 
 		private:
-			key_compare				_comp;
 			allocator_type			_alloc;
+			key_compare				_comp;
 			
 			BSTNode*				min_node(BSTNode *node)
 			{
@@ -50,8 +50,8 @@ class BSTNode
 	
 		public:
 		// Constructors & Destructor
-			explicit BSTNode(value_type d = value_type(), const key_compare& comp = key_compare(), 
-				const allocator_type& alloc = allocator_type()): _alloc(alloc), _comp(comp), data(d)
+			explicit BSTNode(value_type d = value_type(), const allocator_type& alloc = allocator_type(), 
+					const key_compare& comp = key_compare()): data(d), _alloc(alloc), _comp(comp)
 			{
 				this->left = 0;
 				this->right = 0;
@@ -70,6 +70,7 @@ class BSTNode
 			{
 				if (this != &copy)
 				{
+		
 					this->data = copy.data;
 					this->left = copy.left;
 					this->right = copy.right;
@@ -93,19 +94,16 @@ class BSTNode
 				if (!root)
 				{
 					root = this->_alloc.allocate(1);
-					std::cout << "case a" << std::endl;
 					this->_alloc.construct(root, BSTNode(d));
 					return (root);
 				}
 				else if (this->_comp(d.first, root->data.first))
 				{
-					std::cout << "case b" << std::endl;
 					root->left = insert(root->left, d);
 					root->left->parent = root;
 				}
 				else if (d.first != root->data.first)
 				{
-					std::cout << "case c" << std::endl;
 					root->right = insert(root->right, d);
 					root->right->parent = root;
 				}
@@ -115,6 +113,7 @@ class BSTNode
 			// Find
 			BSTNode*		search(BSTNode *root, value_type d) const
 			{
+				std::cout << "entra al search" << std::endl;
 				if (!root || root->data.first == d.first)
 					return (root);
 				else if (this->_comp(d.first, root->data.first))
