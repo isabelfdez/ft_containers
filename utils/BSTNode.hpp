@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 14:16:12 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/07 15:38:50 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/09 17:51:24 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ class BSTNode
 				if (!root || root->data.first == d.first)
 					return (root);
 				else if (this->_comp(d.first, root->data.first))
-					search(root->left, d);
+					return (search(root->left, d));
 				return (search(root->right, d));
 			}
 			
@@ -129,9 +129,9 @@ class BSTNode
 				// Case 0: no root
 				if (!root)
 					return (root);
-				else if (this->_comp(root->data.first, data.first))
+				if (this->_comp(root->data.first, data.first))
 					root->right = deleteNode(root->right, data);
-				else if (this->_comp(data.first, root->data.first))
+				if (this->_comp(data.first, root->data.first))
 					root->left = deleteNode(root->left, data);
 				else
 				{
@@ -142,20 +142,22 @@ class BSTNode
 						this->_alloc.deallocate(root, 1);
 					}
 					// Case 2: 1 left child
-					if (!root->right)
+					else if (!root->right)
 					{
 						temp = root->left;
 						temp->parent = root->parent;
 						this->_alloc.destroy(root);
 						this->_alloc.deallocate(root, 1);
+						return (temp);
 					}
 					// Case 3: 1 right child
-					if (!root->left)
+					else if (!root->left)
 					{
 						temp = root->right;
 						temp->parent = root->parent;
 						this->_alloc.destroy(root);
 						this->_alloc.deallocate(root, 1);
+						return (temp);
 					}
 					// Case 4: 2 children
 					else
@@ -165,7 +167,7 @@ class BSTNode
 						deleteNode(temp, temp->data);					
 					}
 				}
-				return temp;
+				return (root);
 			}
 	
 			// Clean

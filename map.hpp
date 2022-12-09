@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 12:55:18 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/07 14:58:52 by isfernan         ###   ########.fr       */
+/*   Updated: 2022/12/09 19:46:21 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MAP_HPP
 
 # include <iostream>
+# include <stdexcept>
 # include "utils/pair.hpp"
 # include "utils/BSTNode.hpp"
 # include "iterators/BIterator.hpp"
@@ -32,7 +33,7 @@ class map
 		typedef T												mapped_type;
 		typedef Compare											key_compare;
 		typedef Alloc											allocator_type;
-		typedef ft::pair<key_type, mapped_type>			value_type;
+		typedef ft::pair<key_type, mapped_type>					value_type;
 		typedef typename allocator_type::pointer				pointer;
 		typedef typename allocator_type::const_pointer			const_pointer;
 		typedef typename allocator_type::reference				reference;
@@ -67,8 +68,6 @@ class map
 				}
 		};
 
-	
-	//private:
 		allocator_type	_alloc;
 		key_compare		_comp;
 		BST				_Tree;
@@ -77,6 +76,8 @@ class map
 		size_type		_size;
 	
 	public:
+
+		// Constructors & destructor
 		explicit map(const allocator_type& alloc = allocator_type(),
 			const key_compare& comp = key_compare())
 		{
@@ -89,44 +90,78 @@ class map
 			return ;
 		}
 
-		// template < class InputIt >
-		// map(InputIt first, InputIt last, const key_compare& comp = key_compare(),
-		// 	const allocator_type& alloc = allocator_type())
-		// {
-		// 	this->_root = 0;
-		// 	this->_end = 0;
-		// 	this->_end = this->_Tree.insert(this->_end, value_type());
-		// 	this->_size = 0;
-		// 	this->_comp = comp;
-		// 	this->_alloc = alloc;
-		// 	while (first != last)
-		// 	{
-		// 		this->insert(*first);
-		// 		first++;
-		// 	}
-		// 	return ;
-		// }
+		template < class InputIt >
+		map(InputIt first, InputIt last, const key_compare& comp = key_compare(),
+			const allocator_type& alloc = allocator_type())
+		{
+			this->_root = 0;
+			this->_end = 0;
+			this->_end = this->_Tree.insert(this->_end, value_type());
+			this->_size = 0;
+			this->_comp = comp;
+			this->_alloc = alloc;
+			while (first != last)
+			{
+				this->insert(*first);
+				first++;
+			}
+			return ;
+		}
 
-		// map(const map& other)
-		// {
-		// 	const_iterator	first(other.begin());
+		map(const map& other)
+		{
+			const_iterator	first(other.begin());
 
-		// 	this->_root = 0;
-		// 	this->_end = 0;
-		// 	this->_end = this->_Tree.insert(this->_end, value_type());
-		// 	this->_size = 0;
-		// 	this->_comp = other._comp;
-		// 	this->_alloc = other._alloc;
-		// 	if (other._size > 0)
-		// 	{
-		// 		while (first != other.end())
-		// 		{
-		// 			this->insert(*first);
-		// 			first++;
-		// 		}
-		// 	}
-		// 	return ;
-		// }
+			this->_root = 0;
+			this->_end = 0;
+			this->_end = this->_Tree.insert(this->_end, value_type());
+			this->_size = 0;
+			this->_comp = other._comp;
+			this->_alloc = other._alloc;
+			if (other._size > 0)
+			{
+				while (first != other.end())
+				{
+					this->insert(*first);
+					first++;
+				}
+			}
+			return ;
+		}
+
+		~map(void)
+		{
+			this->_Tree.clean(&(this->_end));
+			return ;
+		}
+
+		// Operator=
+
+		map&	operator=(const map& other)
+		{
+			const_iterator	first(other.begin());
+
+			if (this != &other)
+			{
+				if (this->_size > 0)
+					this->_Tree.clean(&(this->_root));
+				this->_end->left = 0;
+				this->_size = 0;
+				this->_comp = other._comp;
+				this->_alloc = other._alloc;
+				if (other.size() > 0)
+				{
+					while (first != other.end())
+					{
+						this->insert(value_type(first->first, first->second));
+						first++;
+					}
+				}
+			}
+			return (*this);
+		}
+
+		// Member functions
 
 		ft::pair<iterator, bool>	insert(const value_type& val)
 		{
@@ -141,12 +176,11 @@ class map
 			this->_root = this->_Tree.insert(this->_root, val);
 			while (this->_root->parent && this->_root->parent->parent)
 				this->_root = this->_root->parent;
-			// if (this->_size == 1)
-			// {
-			// 	std::cout << "hasta aqui" << std::endl;
-			// 	this->_end->left = this->_root;
-			// 	this->_root->parent = this->_end;
-			// }
+			if (this->_size == 1)
+			{
+				this->_end->left = this->_root;
+				this->_root->parent = this->_end;
+			}
 			comp = this->_Tree.search(this->_root, val);
 			return (ft::pair<iterator, bool>(iterator(comp), true));
 		}
@@ -201,31 +235,6 @@ class map
 			return ;
 		}
 
-				map&	operator=(const map& other)
-		{
-			const_iterator	first(other.begin());
-
-			if (this != &other)
-			{
-				if (this->_size > 0)
-					this->_Tree.clean(&(this->_root));
-				this->_end->left = 0;
-				this->_size = 0;
-				this->_comp = other._comp;
-				this->_alloc = other._alloc;
-				if (other.size() > 0)
-				{
-					while (first != other.end())
-					{
-						this->insert(value_type(first->first, first->second));
-						first++;
-					}
-				}
-			}
-			return (*this);
-		}
-
-		/** Iterators **/
 		iterator		begin(void)
 		{
 			iterator	it;
@@ -278,7 +287,6 @@ class map
 			return (reverse_iterator(this->begin()));
 		}
 
-		/** Capacity **/
 		bool		empty(void) const
 		{
 			return (this->_size == 0);
@@ -294,7 +302,6 @@ class map
 			return (this->_Tree.max_size());
 		}
 
-		/** Element access **/
 		mapped_type&		operator[](const key_type& k)
 		{
 			return ((*((this->insert(ft::pair<key_type, mapped_type>(k,mapped_type()))).first)).second);
@@ -320,7 +327,6 @@ class map
 			return ((*((this->insert(ft::pair<key_type, mapped_type>(k,mapped_type()))).first)).second);
 		}
 
-		/** Modifiers **/
 		size_type					erase(const key_type& k)
 		{
 			BST*	comp;
@@ -418,18 +424,9 @@ class map
 			return ;
 		}
 
-		/** Observers **/
-		key_compare		key_comp(void) const
-		{
-			return (this->_comp);
-		}
+		key_compare		key_comp(void) const { return (this->_comp); }
+		value_compare	value_comp(void) const { return (value_compare(this->_comp)); }
 
-		value_compare	value_comp(void) const
-		{
-			return (value_compare(this->_comp));
-		}
-
-		/** Operations **/
 		iterator		find(const key_type& k)
 		{
 			iterator	output(this->_Tree.search(this->_root, value_type(k, mapped_type())));
@@ -525,71 +522,6 @@ class map
 		{
 			return (this->_alloc);
 		}
-
-	
-	// map_iterate(BST* root)
-	// {
-		
-	// }
-
-	// BST* Leftmost(BST* node)
-	// 	{
-	// 	    if (node == nullptr)
-	// 	        return nullptr;
-	// 	    while (node->left != nullptr)
-	// 	        node = node->left;
-	// 	    return node;
-	// 	}
-		
-	// 	// Start iterating from a root node
-	// 	BST* First(BST* root)
-	// 	{
-	// 	    return Leftmost(root);
-	// 	}
-		
-	// 	// The iteration is current at node.  Return the next node
-	// 	// in value order.
-	// 	BST* Next(BST* node)
-	// 	{
-	// 	    // Make sure that the caller hasn't failed to stop.
-	// 	    assert(node != nullptr);
-		
-	// 	    // If we have a right subtree we must iterate over it,
-	// 	    // starting at its leftmost (minimal) node.
-		
-	// 	    if (node->right != nullptr)
-	// 	        return Leftmost(node->right);
-		
-	// 	    // Otherwise we must go up the tree
-		
-	// 	    BST* parent = node->parent;
-	// 	    if (parent == nullptr)
-	// 	        return nullptr;
-		
-	// 	    // A node comes immediately after its left subtree
-		
-	// 	    if (node == parent->left)
-	// 	        return parent;
-		
-	// 	    // This must be the right subtree!
-	// 	    assert(node == parent->right);
-		
-	// 	    // In which case we need to go up again, looking for a node that is
-	// 	    // its parent's left child.
-		
-	// 	    while (parent != nullptr && node != parent->left)
-	// 	    {
-	// 	        node = parent;
-	// 	        parent = node->parent;
-	// 	    }
-		
-	// 	    // We should be at a left child!
-	// 	    assert(parent == nullptr || node == parent->left);
-		
-	// 	    // And, as we know, a node comes immediately after its left subtree
-		
-	// 	    return parent;
-	// 	}
 };
 
 
