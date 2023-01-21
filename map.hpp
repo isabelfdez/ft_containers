@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 12:55:18 by isfernan          #+#    #+#             */
-/*   Updated: 2022/12/09 19:46:21 by isfernan         ###   ########.fr       */
+/*   Updated: 2023/01/21 18:12:03 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "utils/pair.hpp"
 # include "utils/BSTNode.hpp"
 # include "iterators/BIterator.hpp"
+# include "algorithms/equal.hpp"
+# include "algorithms/lexicographical_compare.hpp"
 
 namespace ft {
 
@@ -190,22 +192,21 @@ class map
 			BST*	comp;
 
 			(void)position;
-			comp = 0;
-			if (this->_size > 0)
-				comp = this->_Tree.search(this->_root, val);
-			if (comp)
-				return (ft::pair<iterator, bool>(iterator(comp), false));
-			this->_size += 1;
-			this->_root = this->_Tree.insert(this->_root, val);
-			while (this->_root->parent && this->_root->parent->parent)
-				this->_root = this->_root->parent;
-			if (this->_size == 1)
-			{
-				this->_end->left = this->_root;
-				this->_root->parent = this->_end;
-			}
 			comp = this->_Tree.search(this->_root, val);
-			return (ft::pair<iterator, bool>(iterator(comp), true));
+			if (!comp)
+			{
+				this->_size += 1;
+				this->_root = this->_Tree.insert(this->_root, val);
+				while (this->_root->parent && this->_root->parent->parent)
+					this->_root = this->_root->parent;
+				comp = this->_Tree.search(this->_root, val);
+				if (this->_size == 1)
+				{
+					this->_end->left = this->_root;
+					this->_root->parent = this->_end;
+				}
+			}
+			return (iterator(comp));
 		}
 
 		template <typename InputIterator>
@@ -523,6 +524,44 @@ class map
 			return (this->_alloc);
 		}
 };
+
+template <typename T, typename Alloc>
+bool operator==(const map<T, Alloc>& lhs, const map<T, Alloc>& rhs)
+{
+	if (lhs.size() != rhs.size())
+		return (0);
+	return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+}
+
+template <typename T, typename Alloc>
+bool operator!=(const map<T, Alloc>& lhs, const map<T, Alloc>& rhs)
+{
+	return (!(lhs == rhs));
+}
+	
+template <typename T, typename Alloc>
+bool operator<(const map<T, Alloc>& lhs, const map<T, Alloc>& rhs)
+{
+	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+}
+	
+template <typename T, typename Alloc>
+bool operator<=(const map<T, Alloc>& lhs, const map<T, Alloc>& rhs)
+{
+	return (!(lhs > rhs));
+}
+	
+template <typename T, typename Alloc>
+bool operator>(const map<T, Alloc>& lhs, const map<T, Alloc>& rhs)
+{
+	return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+}
+
+template <typename T, typename Alloc>
+bool operator>=(const map<T, Alloc>& lhs, const map<T, Alloc>& rhs)
+{
+	return (!(lhs < rhs));
+}
 
 
 }

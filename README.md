@@ -8,7 +8,7 @@ To use my containers, include the pertinent `<container.hpp>` file and use the n
 
 ## Status of the project
 
-Unfinished :hourglass_flowing_sand:
+Finished :white_check_mark:
 
 
 ## Some references

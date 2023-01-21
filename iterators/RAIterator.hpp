@@ -6,7 +6,7 @@
 /*   By: isfernan <isfernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 14:07:17 by isfernan          #+#    #+#             */
-/*   Updated: 2022/10/28 14:29:14 by isfernan         ###   ########.fr       */
+/*   Updated: 2023/01/21 17:28:16 by isfernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ class RAIterator
 		difference_type			operator-(const RAIterator& it) { return (_ptr - it._ptr); }
 		// friend difference_type	operator-(const RAIterator& it1, const RAIterator& it2)
 		// {
-		// 	return (RAIterator(it.base() + n));
+		// 	return (RAIterator(it1.base() - it2.base()));
 		// }
 
 		// Assignment operators

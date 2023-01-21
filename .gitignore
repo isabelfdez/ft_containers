@@ -7,3 +7,5 @@ test*.cpp
 a.out.dSYM
 common.hpp
 base.hpp
+tests/
+utils_test/
